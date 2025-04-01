@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fas fa-money-bill-wave"></i>
+            <h1>ฝ่ายการเงิน</h1>
+        </div>
+        <nav>
+            <ul>
+                <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="finance-invoice.html"><i class="fas fa-file-invoice-dollar"></i> ใบแจ้งหนี้</a></li>
+                <li><a href="finance-payment.html"><i class="fas fa-credit-card"></i> การชำระเงิน</a></li>
+                <li><a href="finance-approval.html"><i class="fas fa-check-circle"></i> อนุมัติงบประมาณ</a></li>
+                <li><a href="finance-reports.html"><i class="fas fa-chart-pie"></i> รายงานการเงิน</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <div class="main-content">
+        <header>
+            <div class="search-bar">
+                <input type="text" placeholder="ค้นหา...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="user-profile">
+                <span id="username-display"></span>
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+        
+        <div class="content">
+            <h2>แดชบอร์ดฝ่ายการเงิน</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #4e73df;">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>ใบแจ้งหนี้รอชำระ</h3>
+                        <p id="pending-invoices">5</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #1cc88a;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>ชำระแล้ววันนี้</h3>
+                        <p id="paid-today">2</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #f6c23e;">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>งบประมาณคงเหลือ</h3>
+                        <p id="budget-remaining">฿1,245,600</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #e74a3b;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>รออนุมัติ</h3>
+                        <p id="pending-approvals">3</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="procurement-section">
+                <div class="procurement-card">
+                    <h3>ใบแจ้งหนี้ล่าสุด</h3>
+                    <div class="procurement-list" id="recent-invoices">
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>INV-2024-0015</strong> - อุปกรณ์สำนักงาน</p>
+                                <small>ผู้ขาย: บริษัท ออฟฟิศแมท จำกัด | วันที่ 28/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">รอชำระ</span>
+                            </div>
+                        </div>
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>INV-2024-0014</strong> - คอมพิวเตอร์โน้ตบุ๊ค</p>
+                                <small>ผู้ขาย: บริษัท คอมเทค จำกัด | วันที่ 27/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">รอชำระ</span>
+                            </div>
+                        </div>
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>INV-2024-0013</strong> - เครื่องถ่ายเอกสาร</p>
+                                <small>ผู้ขาย: บริษัท ดิจิทัลโซลูชัน จำกัด | วันที่ 26/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-approved">ชำระแล้ว</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="finance-invoice.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="procurement-card">
+                    <h3>งบประมาณรออนุมัติ</h3>
+                    <div class="procurement-list" id="pending-budget-approvals">
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>PR-2024-0058</strong> - เฟอร์นิเจอร์สำนักงาน</p>
+                                <small>เสนอโดย: ฝ่ายจัดซื้อ | วันที่ 27/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">รออนุมัติ</span>
+                            </div>
+                        </div>
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>PR-2024-0057</strong> - อุปกรณ์คอมพิวเตอร์</p>
+                                <small>เสนอโดย: ฝ่ายจัดซื้อ | วันที่ 26/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">รออนุมัติ</span>
+                            </div>
+                        </div>
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>PR-2024-0056</strong> - อุปกรณ์สำนักงาน</p>
+                                <small>เสนอโดย: ฝ่ายจัดซื้อ | วันที่ 25/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">รออนุมัติ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="finance-approval.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="quick-actions">
+                <h3>ดำเนินการด่วน</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="location.href='finance-payment.html'">
+                        <i class="fas fa-money-bill-wave"></i> ทำรายการชำระเงิน
+                    </button>
+                    <button class="action-btn" onclick="location.href='finance-approval.html'">
+                        <i class="fas fa-check-circle"></i> อนุมัติงบประมาณ
+                    </button>
+                    <button class="action-btn" onclick="location.href='finance-reports.html'">
+                        <i class="fas fa-chart-line"></i> ดูรายงานประจำเดือน
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // ข้อมูลจำลองสำหรับหน้า Finance Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // ตรวจสอบว่าผู้ใช้มี role_id = 4 (Finance)
+            const roleId = localStorage.getItem('role_id') || sessionStorage.getItem('role_id');
+            if (roleId != 4) {
+                // ถ้าเข้าถึงหน้านี้ด้วย role ที่ไม่ใช่ Finance ให้แสดงข้อความเตือน
+                alert('คุณไม่มีสิทธิ์เข้าถึงหน้านี้');
+                // และ redirect ไปยังหน้าที่เหมาะสมตาม role
+                redirectBasedOnRole(roleId);
+                return;
+            }
+            
+            // เพิ่มฟังก์ชันอื่นๆ เฉพาะของหน้า Finance Dashboard ตรงนี้
+            // ...
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fas fa-laptop-code"></i>
+            <h1>ฝ่ายไอที</h1>
+        </div>
+        <nav>
+            <ul>
+                <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="user-management.html"><i class="fas fa-users-cog"></i> จัดการผู้ใช้</a></li>
+                <li><a href="it-inventory.html"><i class="fas fa-server"></i> อุปกรณ์ IT</a></li>
+                <li><a href="system-monitor.html"><i class="fas fa-heartbeat"></i> ตรวจสอบระบบ</a></li>
+                <li><a href="system-settings.html"><i class="fas fa-cogs"></i> ตั้งค่าระบบ</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <div class="main-content">
+        <header>
+            <div class="search-bar">
+                <input type="text" placeholder="ค้นหา...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="user-profile">
+                <span id="username-display"></span>
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+        
+        <div class="content">
+            <h2>แดชบอร์ดฝ่ายไอที</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #4e73df;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>ผู้ใช้ทั้งหมด</h3>
+                        <p id="total-users">26</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #1cc88a;">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>อุปกรณ์ทั้งหมด</h3>
+                        <p id="total-devices">48</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #f6c23e;">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>งานค้าง</h3>
+                        <p id="open-tickets">5</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #e74a3b;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>แจ้งเตือนระบบ</h3>
+                        <p id="system-alerts">2</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="procurement-section">
+                <div class="procurement-card">
+                    <h3>งานที่ได้รับมอบหมาย</h3>
+                    <div class="procurement-list" id="it-tickets">
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>TICK-2024-0015</strong> - ติดตั้งเครื่องคอมพิวเตอร์ใหม่</p>
+                                <small>แผนก: ฝ่ายการตลาด | วันที่ 28/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">รอดำเนินการ</span>
+                            </div>
+                        </div>
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>TICK-2024-0014</strong> - แก้ไขปัญหาอีเมล</p>
+                                <small>แผนก: ฝ่ายบุคคล | วันที่ 27/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">กำลังดำเนินการ</span>
+                            </div>
+                        </div>
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>TICK-2024-0013</strong> - อัพเดทซอฟต์แวร์</p>
+                                <small>แผนก: ฝ่ายการเงิน | วันที่ 26/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-approved">เสร็จสิ้น</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="it-tickets.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="procurement-card">
+                    <h3>ระบบที่ต้องเฝ้าระวัง</h3>
+                    <div class="procurement-list" id="system-monitoring">
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>เซิร์ฟเวอร์หลัก</strong> - การใช้งาน CPU: 78%</p>
+                                <small>สถานะ: ปกติ | อัพเดทล่าสุด: 5 นาทีที่แล้ว</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">เฝ้าระวัง</span>
+                            </div>
+                        </div>
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>ฐานข้อมูลหลัก</strong> - พื้นที่เหลือ: 18%</p>
+                                <small>สถานะ: ต้องขยายพื้นที่ | อัพเดทล่าสุด: 10 นาทีที่แล้ว</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-rejected">เตือนภัย</span>
+                            </div>
+                        </div>
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>ระบบสำรองข้อมูล</strong> - สถานะ: ทำงานปกติ</p>
+                                <small>สำรองล่าสุด: 02:00 น. วันนี้</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-approved">ปกติ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="system-monitor.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="quick-actions">
+                <h3>ดำเนินการด่วน</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="location.href='user-management.html'">
+                        <i class="fas fa-user-plus"></i> เพิ่มผู้ใช้งาน
+                    </button>
+                    <button class="action-btn" onclick="location.href='system-monitor.html'">
+                        <i class="fas fa-heartbeat"></i> ตรวจสอบระบบ
+                    </button>
+                    <button class="action-btn" onclick="location.href='system-backup.html'">
+                        <i class="fas fa-database"></i> สำรองข้อมูล
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // ข้อมูลจำลองสำหรับหน้า IT Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // ตรวจสอบว่าผู้ใช้มี role_id = 5 (IT)
+            const roleId = localStorage.getItem('role_id') || sessionStorage.getItem('role_id');
+            if (roleId != 5) {
+                // ถ้าเข้าถึงหน้านี้ด้วย role ที่ไม่ใช่ IT ให้แสดงข้อความเตือน
+                alert('คุณไม่มีสิทธิ์เข้าถึงหน้านี้');
+                // และ redirect ไปยังหน้าที่เหมาะสมตาม role
+                redirectBasedOnRole(roleId);
+                return;
+            }
+            
+            // เพิ่มฟังก์ชันอื่นๆ เฉพาะของหน้า IT Dashboard ตรงนี้
+            // เช่น การอัพเดทข้อมูลการเฝ้าระวังระบบแบบเรียลไทม์
+            setInterval(function() {
+                // จำลองการอัพเดทข้อมูลทุก 1 นาที
+                const cpuUsage = Math.floor(50 + Math.random() * 40); // 50-90%
+                document.querySelector('#system-monitoring .procurement-item:first-child .procurement-item-info p strong').nextSibling.nodeValue = ` - การใช้งาน CPU: ${cpuUsage}%`;
+                document.querySelector('#system-monitoring .procurement-item:first-child .procurement-item-info small').textContent = `สถานะ: ${cpuUsage > 85 ? 'สูง' : 'ปกติ'} | อัพเดทล่าสุด: เมื่อสักครู่`;
+                
+                if (cpuUsage > 85) {
+                    document.querySelector('#system-monitoring .procurement-item:first-child .status-badge').className = 'status-badge status-rejected';
+                    document.querySelector('#system-monitoring .procurement-item:first-child .status-badge').textContent = 'เตือนภัย';
+                }
+            }, 60000); // ทุก 1 นาที
+        });
+    </script>
+</body>
+</html>

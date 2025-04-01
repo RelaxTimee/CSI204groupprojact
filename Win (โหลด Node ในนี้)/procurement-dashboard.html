@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procurement Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fas fa-shopping-cart"></i>
+            <h1>ฝ่ายจัดซื้อ</h1>
+        </div>
+        <nav>
+            <ul>
+                <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="purchase-requisition.html"><i class="fas fa-file-alt"></i> จัดทำใบขอซื้อ</a></li>
+                <li><a href="purchase-order.html"><i class="fas fa-file-invoice"></i> จัดทำใบสั่งซื้อ</a></li>
+                <li><a href="vendor-management.html"><i class="fas fa-store"></i> จัดการผู้ขาย</a></li>
+                <li><a href="inventory.html"><i class="fas fa-boxes"></i> จัดการสินค้าคงคลัง</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <div class="main-content">
+        <header>
+            <div class="search-bar">
+                <input type="text" placeholder="ค้นหา...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="user-profile">
+                <span id="username-display"></span>
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+        
+        <div class="content">
+            <h2>แดชบอร์ดฝ่ายจัดซื้อ</h2>
+            
+            <div class="procurement-section">
+                <div class="procurement-card">
+                    <h3>ใบขอซื้อที่รอดำเนินการ</h3>
+                    <div class="procurement-list" id="pending-requisitions">
+                        <!-- List will be loaded here -->
+                    </div>
+                    <a href="purchase-requisition.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="procurement-card">
+                    <h3>ใบสั่งซื้อที่รอดำเนินการ</h3>
+                    <div class="procurement-list" id="pending-orders">
+                        <!-- List will be loaded here -->
+                    </div>
+                    <a href="purchase-order.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="quick-actions">
+                <h3>ดำเนินการด่วน</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="location.href='purchase-requisition.html'">
+                        <i class="fas fa-plus-circle"></i> สร้างใบขอซื้อใหม่
+                    </button>
+                    <button class="action-btn" onclick="location.href='purchase-order.html'">
+                        <i class="fas fa-file-signature"></i> สร้างใบสั่งซื้อใหม่
+                    </button>
+                    <button class="action-btn" onclick="location.href='vendor-management.html'">
+                        <i class="fas fa-user-plus"></i> เพิ่มผู้ขายใหม่
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="auth.js"></script>
+    <script src="procurement.js"></script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fas fa-user-tie"></i>
+            <h1>ผู้จัดการ</h1>
+        </div>
+        <nav>
+            <ul>
+                <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="approval-request.html"><i class="fas fa-clipboard-check"></i> คำขออนุมัติ</a></li>
+                <li><a href="manager-procurement.html"><i class="fas fa-shopping-cart"></i> การจัดซื้อ</a></li>
+                <li><a href="department-budget.html"><i class="fas fa-money-bill-alt"></i> งบประมาณแผนก</a></li>
+                <li><a href="manager-reports.html"><i class="fas fa-chart-line"></i> รายงานผลการดำเนินงาน</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <div class="main-content">
+        <header>
+            <div class="search-bar">
+                <input type="text" placeholder="ค้นหา...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="user-profile">
+                <span id="username-display"></span>
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+        
+        <div class="content">
+            <h2>แดชบอร์ดผู้จัดการ</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #4e73df;">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>คำขอรออนุมัติ</h3>
+                        <p id="pending-approvals">8</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #1cc88a;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>อนุมัติแล้ว</h3>
+                        <p id="approved-requests">24</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #f6c23e;">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>งบประมาณที่ใช้ไป</h3>
+                        <p id="budget-used">฿850,400</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #e74a3b;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>ปัญหาเร่งด่วน</h3>
+                        <p id="urgent-issues">2</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="procurement-section">
+                <div class="procurement-card">
+                    <h3>คำขออนุมัติล่าสุด</h3>
+                    <div class="procurement-list" id="recent-approval-requests">
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>PR-2024-0058</strong> - เฟอร์นิเจอร์สำนักงาน</p>
+                                <small>จากแผนก: ฝ่ายจัดซื้อ | วันที่ 27/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">รออนุมัติ</span>
+                            </div>
+                        </div>
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>PR-2024-0057</strong> - อุปกรณ์คอมพิวเตอร์</p>
+                                <small>จากแผนก: ฝ่ายจัดซื้อ | วันที่ 26/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">รออนุมัติ</span>
+                            </div>
+                        </div>
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>PR-2024-0056</strong> - อุปกรณ์สำนักงาน</p>
+                                <small>จากแผนก: ฝ่ายจัดซื้อ | วันที่ 25/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">รออนุมัติ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="approval-request.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="procurement-card">
+                    <h3>โครงการสำคัญ</h3>
+                    <div class="procurement-list" id="important-projects">
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>PRJ-2024-0005</strong> - ปรับปรุงห้องประชุมใหญ่</p>
+                                <small>สถานะ: กำลังดำเนินการ | เสร็จสิ้น: 45%</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">In Progress</span>
+                            </div>
+                        </div>
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>PRJ-2024-0004</strong> - อัพเกรดระบบเครือข่าย</p>
+                                <small>สถานะ: กำลังดำเนินการ | เสร็จสิ้น: 70%</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-pending">In Progress</span>
+                            </div>
+                        </div>
+                        <div class="procurement-item">
+                            <div class="procurement-item-info">
+                                <p><strong>PRJ-2024-0003</strong> - ระบบความปลอดภัย</p>
+                                <small>สถานะ: เสร็จสิ้น | วันที่: 15/03/2024</small>
+                            </div>
+                            <div class="procurement-item-status">
+                                <span class="status-badge status-approved">Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="manager-projects.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="quick-actions">
+                <h3>ดำเนินการด่วน</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="location.href='approval-request.html'">
+                        <i class="fas fa-clipboard-check"></i> อนุมัติคำขอ
+                    </button>
+                    <button class="action-btn" onclick="location.href='department-budget.html'">
+                        <i class="fas fa-money-bill-alt"></i> ตรวจสอบงบประมาณ
+                    </button>
+                    <button class="action-btn" onclick="location.href='manager-reports.html'">
+                        <i class="fas fa-chart-line"></i> ดูรายงานสรุป
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // ข้อมูลจำลองสำหรับหน้า Manager Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // ตรวจสอบว่าผู้ใช้มี role_id = 2 (Manager)
+            const roleId = localStorage.getItem('role_id') || sessionStorage.getItem('role_id');
+            if (roleId != 2) {
+                // ถ้าเข้าถึงหน้านี้ด้วย role ที่ไม่ใช่ Manager ให้แสดงข้อความเตือน
+                alert('คุณไม่มีสิทธิ์เข้าถึงหน้านี้');
+                // และ redirect ไปยังหน้าที่เหมาะสมตาม role
+                redirectBasedOnRole(roleId);
+                return;
+            }
+            
+            // เพิ่มฟังก์ชันอื่นๆ เฉพาะของหน้า Manager Dashboard ตรงนี้
+            // ...
+        });
+    </script>
+</body>
+</html>

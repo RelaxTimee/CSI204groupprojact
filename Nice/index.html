@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Procurement Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Procurement System</h2>
+                <p>Digital Platform</p>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item active" onclick="showSection('dashboard')">
+                    <i>📊</i> Dashboard
+                </div>
+                <div class="menu-item" onclick="showSection('purchase-request')">
+                    <i>📝</i> Purchase Request
+                </div>
+                <div class="menu-item" onclick="showSection('purchase-order')">
+                    <i>📋</i> Purchase Order
+                </div>
+                <div class="menu-item" onclick="showSection('fixed-assets')">
+                    <i>🏢</i> Fixed Assets
+                </div>
+                <div class="menu-item" onclick="showSection('inventory')">
+                    <i>📦</i> Inventory
+                </div>
+                <div class="menu-item" onclick="showSection('reports')">
+                    <i>📈</i> Reports
+                </div>
+                <div class="menu-item" onclick="showSection('settings')">
+                    <i>⚙️</i> Settings
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="user-info">
+                    <div class="user-avatar">JD</div>
+                    <div>
+                        <div>John Doe</div>
+                        <small>Procurement Officer</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dashboard Section -->
+            <div id="dashboard-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Quick Actions</h3>
+                    </div>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="showSection('purchase-request')">
+                            Create Purchase Request
+                        </button>
+                        <button class="btn btn-primary" onclick="showSection('purchase-order')">
+                            Create Purchase Order
+                        </button>
+                        <button class="btn btn-secondary" onclick="showSection('fixed-assets')">
+                            Register Fixed Asset
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Recent Activities</h3>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2023-11-15</td>
+                                <td>Purchase Request</td>
+                                <td>Office Chairs (10 units)</td>
+                                <td><span class="badge badge-success">Approved</span></td>
+                                <td>$1,200.00</td>
+                            </tr>
+                            <tr>
+                                <td>2023-11-14</td>
+                                <td>Purchase Order</td>
+                                <td>Computer Equipment</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td>$3,450.00</td>
+                            </tr>
+                            <tr>
+                                <td>2023-11-12</td>
+                                <td>Fixed Asset</td>
+                                <td>Projector (Conference Room)</td>
+                                <td><span class="badge badge-success">Registered</span></td>
+                                <td>$850.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Purchase Request Section -->
+            <div id="purchase-request-section" class="d-none">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Create Purchase Request</h3>
+                    </div>
+                    <form id="purchase-request-form">
+                        <div class="form-group">
+                            <label for="pr-description">Description</label>
+                            <input type="text" id="pr-description" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="pr-budget-code">Budget Code</label>
+                            <select id="pr-budget-code" class="form-control" required>
+                                <option value="">Select Budget Code</option>
+                                <option value="IT-2023">IT Equipment (2023)</option>
+                                <option value="OFFICE-2023">Office Supplies (2023)</option>
+                                <option value="FURN-2023">Furniture (2023)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="pr-fixed-asset"> This is for Fixed Asset
+                            </label>
+                        </div>
+                        
+                        <h4>Items</h4>
+                        <table class="table mb-3">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Unit</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Amount</th>
+                                    <th>Required Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pr-items">
+                                <!-- Items will be added here -->
+                            </tbody>
+                        </table>
+                        
+                        <button type="button" class="btn btn-secondary" onclick="addPRItem()">Add Item</button>
+                        
+                        <div class="form-group mt-3">
+                            <label for="pr-notes">Notes</label>
+                            <textarea id="pr-notes" class="form-control" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group text-center mt-3">
+                            <button type="submit" class="btn btn-primary">Submit Request</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>My Purchase Requests</h3>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>PR Number</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Total Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PR-2023-001</td>
+                                <td>2023-11-15</td>
+                                <td>Office Chairs</td>
+                                <td><span class="badge badge-success">Approved</span></td>
+                                <td>$1,200.00</td>
+                                <td><button class="btn btn-secondary">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>PR-2023-002</td>
+                                <td>2023-11-10</td>
+                                <td>Computer Monitors</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td>$2,500.00</td>
+                                <td><button class="btn btn-secondary">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Purchase Order Section -->
+            <div id="purchase-order-section" class="d-none">
+                <div class="tabs">
+                    <div class="tab active" onclick="showPOTab('create')">Create PO</div>
+                    <div class="tab" onclick="showPOTab('list')">PO List</div>
+                </div>
+                
+                <div id="po-create-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Create Purchase Order</h3>
+                        </div>
+                        <form id="purchase-order-form">
+                            <div class="form-group">
+                                <label for="po-pr-number">Purchase Request</label>
+                                <select id="po-pr-number" class="form-control" required>
+                                    <option value="">Select PR</option>
+                                    <option value="PR-2023-001">PR-2023-001 (Office Chairs - $1,200.00)</option>
+                                    <option value="PR-2023-002">PR-2023-002 (Computer Monitors - $2,500.00)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="po-vendor">Vendor</label>
+                                <select id="po-vendor" class="form-control" required>
+                                    <option value="">Select Vendor</option>
+                                    <option value="V001">Office Supplies Co.</option>
+                                    <option value="V002">Tech Equipment Ltd.</option>
+                                    <option value="V003">Furniture World</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="po-payment-terms">Payment Terms</label>
+                                <select id="po-payment-terms" class="form-control" required>
+                                    <option value="NET30">Net 30 Days</option>
+                                    <option value="NET15">Net 15 Days</option>
+                                    <option value="IMMEDIATE">Immediate Payment</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="po-notes">Notes</label>
+                                <textarea id="po-notes" class="form-control" rows="3"></textarea>
+                            </div>
+                            
+                            <div id="po-items-container">
+                                <!-- Items will be loaded from PR -->
+                            </div>
+                            
+                            <div class="form-group text-center mt-3">
+                                <button type="submit" class="btn btn-primary">Create Purchase Order</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div id="po-list-tab" class="d-none">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Purchase Orders</h3>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>PO Number</th>
+                                    <th>Date</th>
+                                    <th>Vendor</th>
+                                    <th>PR Reference</th>
+                                    <th>Status</th>
+                                    <th>Total Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>PO-2023-001</td>
+                                    <td>2023-11-16</td>
+                                    <td>Office Supplies Co.</td>
+                                    <td>PR-2023-001</td>
+                                    <td><span class="badge badge-success">Completed</span></td>
+                                    <td>$1,200.00</td>
+                                    <td><button class="btn btn-secondary">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>PO-2023-002</td>
+                                    <td>2023-11-14</td>
+                                    <td>Tech Equipment Ltd.</td>
+                                    <td>PR-2023-002</td>
+                                    <td><span class="badge badge-warning">Pending</span></td>
+                                    <td>$2,500.00</td>
+                                    <td><button class="btn btn-secondary">View</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Fixed Assets Section -->
+            <div id="fixed-assets-section" class="d-none">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Register Fixed Asset</h3>
+                    </div>
+                    <form id="fixed-asset-form">
+                        <div class="form-group">
+                            <label for="fa-po-number">Purchase Order</label>
+                            <select id="fa-po-number" class="form-control" required>
+                                <option value="">Select PO</option>
+                                <option value="PO-2023-001">PO-2023-001 (Office Chairs)</option>
+                                <option value="PO-2023-002">PO-2023-002 (Computer Monitors)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fa-asset-name">Asset Name</label>
+                            <input type="text" id="fa-asset-name" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fa-asset-category">Category</label>
+                            <select id="fa-asset-category" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="FURNITURE">Furniture</option>
+                                <option value="IT_EQUIPMENT">IT Equipment</option>
+                                <option value="OFFICE_EQUIPMENT">Office Equipment</option>
+                                <option value="VEHICLE">Vehicle</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fa-asset-location">Location</label>
+                            <input type="text" id="fa-asset-location" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fa-asset-value">Value</label>
+                            <input type="number" id="fa-asset-value" class="form-control" step="0.01" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fa-asset-depreciation">Depreciation Period (Years)</label>
+                            <input type="number" id="fa-asset-depreciation" class="form-control" min="1" value="5" required>
+                        </div>
+                        
+                        <div class="form-group text-center mt-3">
+                            <button type="submit" class="btn btn-primary">Register Asset</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Fixed Assets Register</h3>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Asset ID</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Location</th>
+                                <th>Value</th>
+                                <th>Purchase Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>FA-001</td>
+                                <td>Office Chair</td>
+                                <td>Furniture</td>
+                                <td>Room 101</td>
+                                <td>$120.00</td>
+                                <td>2023-11-16</td>
+                                <td><button class="btn btn-secondary">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>FA-002</td>
+                                <td>Projector</td>
+                                <td>Office Equipment</td>
+                                <td>Meeting Room</td>
+                                <td>$850.00</td>
+                                <td>2023-11-12</td>
+                                <td><button class="btn btn-secondary">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Inventory Section -->
+            <div id="inventory-section" class="d-none">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Inventory Management</h3>
+                    </div>
+                    <div class="tabs">
+                        <div class="tab active" onclick="showInventoryTab('items')">Items</div>
+                        <div class="tab" onclick="showInventoryTab('receiving')">Receiving</div>
+                        <div class="tab" onclick="showInventoryTab('issuing')">Issuing</div>
+                    </div>
+                    
+                    <div id="inventory-items-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Inventory Items</h4>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Item Code</th>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Quantity</th>
+                                        <th>Unit</th>
+                                        <th>Unit Cost</th>
+                                        <th>Total Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>IT-001</td>
+                                        <td>Computer Mouse</td>
+                                        <td>IT Equipment</td>
+                                        <td>25</td>
+                                        <td>pcs</td>
+                                        <td>$15.00</td>
+                                        <td>$375.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>OFF-001</td>
+                                        <td>A4 Paper</td>
+                                        <td>Office Supplies</td>
+                                        <td>10</td>
+                                        <td>ream</td>
+                                        <td>$5.00</td>
+                                        <td>$50.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="inventory-receiving-tab" class="d-none">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Receive Items</h4>
+                            </div>
+                            <form id="receive-items-form">
+                                <div class="form-group">
+                                    <label for="ri-po-number">Purchase Order</label>
+                                    <select id="ri-po-number" class="form-control" required>
+                                        <option value="">Select PO</option>
+                                        <option value="PO-2023-001">PO-2023-001 (Office Supplies Co.)</option>
+                                        <option value="PO-2023-002">PO-2023-002 (Tech Equipment Ltd.)</option>
+                                    </select>
+                                </div>
+                                
+                                <div id="ri-items-container">
+                                    <!-- Items will be loaded from PO -->
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="ri-notes">Notes</label>
+                                    <textarea id="ri-notes" class="form-control" rows="3"></textarea>
+                                </div>
+                                
+                                <div class="form-group text-center mt-3">
+                                    <button type="submit" class="btn btn-primary">Receive Items</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div id="inventory-issuing-tab" class="d-none">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Issue Items</h4>
+                            </div>
+                            <form id="issue-items-form">
+                                <div class="form-group">
+                                    <label for="ii-requester">Requester</label>
+                                    <input type="text" id="ii-requester" class="form-control" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="ii-department">Department</label>
+                                    <input type="text" id="ii-department" class="form-control" required>
+                                </div>
+                                
+                                <div id="ii-items-container">
+                                    <div class="form-group">
+                                        <label>Item</label>
+                                        <select class="form-control">
+                                            <option value="">Select Item</option>
+                                            <option value="IT-001">Computer Mouse</option>
+                                            <option value="OFF-001">A4 Paper</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Quantity</label>
+                                        <input type="number" class="form-control" min="1">
+                                    </div>
+                                </div>
+                                
+                                <button type="button" class="btn btn-secondary" onclick="addIssueItem()">Add Another Item</button>
+                                
+                                <div class="form-group">
+                                    <label for="ii-purpose">Purpose</label>
+                                    <textarea id="ii-purpose" class="form-control" rows="3" required></textarea>
+                                </div>
+                                
+                                <div class="form-group text-center mt-3">
+                                    <button type="submit" class="btn btn-primary">Issue Items</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reports Section -->
+            <div id="reports-section" class="d-none">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Reports</h3>
+                    </div>
+                    <div class="tabs">
+                        <div class="tab active" onclick="showReportTab('pr')">Purchase Requests</div>
+                        <div class="tab" onclick="showReportTab('po')">Purchase Orders</div>
+                        <div class="tab" onclick="showReportTab('assets')">Fixed Assets</div>
+                        <div class="tab" onclick="showReportTab('inventory')">Inventory</div>
+                    </div>
+                    
+                    <div id="report-pr-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Purchase Request Report</h4>
+                            </div>
+                            <div class="form-group">
+                                <label for="pr-report-period">Period</label>
+                                <select id="pr-report-period" class="form-control">
+                                    <option value="this-month">This Month</option>
+                                    <option value="last-month">Last Month</option>
+                                    <option value="this-quarter">This Quarter</option>
+                                    <option value="this-year">This Year</option>
+                                    <option value="custom">Custom Range</option>
+                                </select>
+                            </div>
+                            
+                            <div id="pr-custom-range" class="d-none" style="display: flex; gap: 15px;">
+                                <div class="form-group" style="flex: 1;">
+                                    <label for="pr-from-date">From Date</label>
+                                    <input type="date" id="pr-from-date" class="form-control">
+                                </div>
+                                <div class="form-group" style="flex: 1;">
+                                    <label for="pr-to-date">To Date</label>
+                                    <input type="date" id="pr-to-date" class="form-control">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group text-center mt-3">
+                                <button class="btn btn-primary" onclick="generatePRReport()">Generate Report</button>
+                            </div>
+                            
+                            <div id="pr-report-results" class="mt-3">
+                                <!-- Report results will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="report-po-tab" class="d-none">
+                        <!-- Similar structure as PR report -->
+                    </div>
+                    
+                    <div id="report-assets-tab" class="d-none">
+                        <!-- Similar structure as PR report -->
+                    </div>
+                    
+                    <div id="report-inventory-tab" class="d-none">
+                        <!-- Similar structure as PR report -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Section -->
+            <div id="settings-section" class="d-none">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>System Settings</h3>
+                    </div>
+                    <div class="tabs">
+                        <div class="tab active" onclick="showSettingsTab('users')">Users</div>
+                        <div class="tab" onclick="showSettingsTab('budgets')">Budgets</div>
+                        <div class="tab" onclick="showSettingsTab('vendors')">Vendors</div>
+                        <div class="tab" onclick="showSettingsTab('system')">System</div>
+                    </div>
+                    
+                    <div id="settings-users-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>User Management</h4>
+                                <button class="btn btn-primary" onclick="showAddUserForm()">Add User</button>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Full Name</th>
+                                        <th>Role</th>
+                                        <th>Department</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>jdoe</td>
+                                        <td>John Doe</td>
+                                        <td>Procurement</td>
+                                        <td>Operations</td>
+                                        <td><span class="badge badge-success">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-secondary">Edit</button>
+                                            <button class="btn btn-danger">Deactivate</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>asmith</td>
+                                        <td>Alice Smith</td>
+                                        <td>Finance</td>
+                                        <td>Accounting</td>
+                                        <td><span class="badge badge-success">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-secondary">Edit</button>
+                                            <button class="btn btn-danger">Deactivate</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="settings-budgets-tab" class="d-none">
+                        <!-- Budget management -->
+                    </div>
+                    
+                    <div id="settings-vendors-tab" class="d-none">
+                        <!-- Vendor management -->
+                    </div>
+                    
+                    <div id="settings-system-tab" class="d-none">
+                        <!-- System settings -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="script.js"></script>
+</html>
