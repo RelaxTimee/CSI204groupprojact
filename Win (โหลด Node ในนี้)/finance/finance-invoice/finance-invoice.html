@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ใบแจ้งหนี้ | ฝ่ายการเงิน</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/dashboard.css">
+    <link rel="stylesheet" href="/finance/finance-invoice/finance-invoice.css">
+
+
+    <!-- เพิ่ม CSS variables -->
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --danger: #e74a3b;
+            --warning: #f6c23e;
+            --dark: #5a5c69;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fas fa-money-bill-wave"></i>
+            <h1>ฝ่ายการเงิน</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/finance-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li ><a href="/finance/finance-invoice/finance-invoice.html"><i class="fas fa-file-invoice-dollar"></i> ใบแจ้งหนี้</a></li>
+                <!-- <li><a href="/finance/finance-payment/finance-payment.html"><i class="fas fa-credit-card"></i> การชำระเงิน</a></li> -->
+                <li><a href="/finance/finance-approval/finance-approval.html"><i class="fas fa-check-circle"></i> อนุมัติงบประมาณ</a></li>
+                <li><a href="/finance/finance-reports/finance-reports.html"><i class="fas fa-chart-pie"></i> รายงานการเงิน</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <div class="main-content">
+        <header>
+            <div class="search-bar">
+                <input type="text" placeholder="ค้นหาใบแจ้งหนี้...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="user-profile">
+                <span id="username-display">ผู้ดูแลระบบ</span>
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+        
+        <div class="content">
+            <h2>ใบแจ้งหนี้</h2>
+            
+
+            
+            <!-- ตารางใบแจ้งหนี้ -->
+            <div class="table-responsive">
+                <table class="invoice-table" id="invoice-table">
+                    <thead>
+                        <tr>
+                            <th>เลขที่</th>
+                            <th>รายละเอียด</th>
+                            <th>ผู้ขาย</th>
+                            <th>วันที่ออก</th>
+                            <th>วันครบกำหนด</th>
+                            <th>จำนวนเงิน</th>
+                            <th>สถานะ</th>
+                            <th>การทำงาน</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoice-table-body">
+                        <!-- ข้อมูลตารางจะถูกเพิ่มด้วย JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal รายละเอียดใบแจ้งหนี้ -->
+    <div class="invoice-modal" id="invoice-detail-modal">
+        <div class="invoice-modal-content">
+            <div class="invoice-modal-header">
+                <h3 class="invoice-modal-title">รายละเอียดใบแจ้งหนี้</h3>
+                <button class="invoice-modal-close" id="close-detail-modal">&times;</button>
+            </div>
+            <div class="invoice-details">
+                <div class="invoice-detail-row">
+                    <div class="invoice-detail-label">เลขที่ใบแจ้งหนี้:</div>
+                    <div class="invoice-detail-value" id="detail-invoice-id"></div>
+                </div>
+                <div class="invoice-detail-row">
+                    <div class="invoice-detail-label">รายละเอียด:</div>
+                    <div class="invoice-detail-value" id="detail-description"></div>
+                </div>
+                <div class="invoice-detail-row">
+                    <div class="invoice-detail-label">ผู้ขาย:</div>
+                    <div class="invoice-detail-value" id="detail-vendor"></div>
+                </div>
+                <div class="invoice-detail-row">
+                    <div class="invoice-detail-label">วันที่ออกใบแจ้งหนี้:</div>
+                    <div class="invoice-detail-value" id="detail-issue-date"></div>
+                </div>
+                <div class="invoice-detail-row">
+                    <div class="invoice-detail-label">วันครบกำหนด:</div>
+                    <div class="invoice-detail-value" id="detail-due-date"></div>
+                </div>
+                <div class="invoice-detail-row">
+                    <div class="invoice-detail-label">สถานะ:</div>
+                    <div class="invoice-detail-value" id="detail-status"></div>
+                </div>
+            </div>
+            <div class="invoice-items">
+                <h4 class="invoice-items-title">รายการสินค้า</h4>
+                <table class="invoice-items-table">
+                    <thead>
+                        <tr>
+                            <th>รายการ</th>
+                            <th>จำนวน</th>
+                            <th>ราคาต่อหน่วย</th>
+                            <th>รวม</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detail-items">
+                        <!-- รายการสินค้าจะถูกเพิ่มโดย JavaScript -->
+                    </tbody>
+                </table>
+                <div class="invoice-items-total">
+                    ยอดรวมทั้งสิ้น: <span id="detail-total"></span>
+                </div>
+            </div>
+            <div class="invoice-modal-footer">
+                <button class="invoice-modal-btn cancel-modal-btn" id="close-detail-btn">ปิด</button>
+                <button class="invoice-modal-btn pay-modal-btn" id="pay-invoice-btn">ชำระเงิน</button>
+                <button class="invoice-modal-btn delete-modal-btn" id="delete-invoice-btn">ลบ</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal สร้าง/แก้ไขใบแจ้งหนี้ -->
+    <!-- แก้เป็น -->
+<!-- แก้ไขส่วน Modal สร้าง/แก้ไขใบแจ้งหนี้ -->
+<div class="edit-invoice-modal" id="edit-invoice-modal">
+    <div class="edit-invoice-modal-content">
+        <div class="edit-invoice-modal-header">
+            <h3 class="edit-invoice-modal-title" id="edit-modal-title">สร้างใบแจ้งหนี้ใหม่</h3>
+            <button class="edit-invoice-modal-close" id="close-edit-modal">&times;</button>
+        </div>
+        <form id="edit-invoice-form">
+            <input type="hidden" id="edit-invoice-id">
+            <div class="edit-invoice-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-description">รายละเอียด</label>
+                        <input type="text" id="edit-description" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-vendor">ผู้ขาย</label>
+                        <select id="edit-vendor" required>
+                            <option value="">เลือกผู้ขาย</option>
+                            <option value="บริษัท ออฟฟิศแมท จำกัด">บริษัท ออฟฟิศแมท จำกัด</option>
+                            <option value="บริษัท คอมเทค จำกัด">บริษัท คอมเทค จำกัด</option>
+                            <option value="บริษัท ดิจิทัลโซลูชัน จำกัด">บริษัท ดิจิทัลโซลูชัน จำกัด</option>
+                            <option value="บริษัท เน็ตเวิร์คโซลูชัน จำกัด">บริษัท เน็ตเวิร์คโซลูชัน จำกัด</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-issue-date">วันที่ออกใบแจ้งหนี้</label>
+                        <input type="date" id="edit-issue-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-due-date">วันครบกำหนด</label>
+                        <input type="date" id="edit-due-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-status">สถานะ</label>
+                        <select id="edit-status" required>
+                            <option value="รอชำระ">รอชำระ</option>
+                            <option value="ชำระแล้ว">ชำระแล้ว</option>
+                            <option value="เลยกำหนด">เลยกำหนด</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="invoice-items-section">
+                    <div class="section-header">
+                        <h4>รายการสินค้า</h4>
+                        <button type="button" class="add-item-btn" id="add-item-btn">
+                            <i class="fas fa-plus"></i> เพิ่มรายการ
+                        </button>
+                    </div>
+                    <div class="items-table-header">
+                        <span>รายการ</span>
+                        <span>จำนวน</span>
+                        <span>ราคาต่อหน่วย</span>
+                        <span>รวม</span>
+                        <span></span>
+                    </div>
+                    <div id="edit-items-container">
+                        <!-- รายการสินค้าจะถูกเพิ่มโดย JavaScript -->
+                    </div>
+                    <div class="invoice-total">
+                        <span>ยอดรวมทั้งสิ้น:</span>
+                        <span id="edit-total-amount">฿0.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="edit-invoice-modal-footer">
+                <button type="button" class="invoice-modal-btn cancel-modal-btn" id="cancel-edit-btn">ยกเลิก</button>
+                <button type="submit" class="invoice-modal-btn save-modal-btn" id="save-invoice-btn">บันทึก</button>
+            </div>
+        </form>
+    </div>
+</div>
+    
+    
+</body>
+<script src="/finance/finance-invoice/finance-invoice.js"></script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

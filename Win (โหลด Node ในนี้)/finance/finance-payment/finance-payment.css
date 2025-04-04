@@ -1,0 +1,510 @@
+/* สไตล์สำหรับหน้าการชำระเงิน */
+.payment-filter {
+    background-color: white;
+    border-radius: 0.35rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--dark);
+}
+
+.form-group input, 
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.35rem;
+    border: 1px solid #d1d3e2;
+    transition: all 0.3s;
+}
+
+.form-group input:focus, 
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.filter-btn {
+    padding: 0.5rem 1.25rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 0.35rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.filter-btn i {
+    margin-right: 0.5rem;
+}
+
+.filter-btn:hover {
+    background-color: #2e59d9;
+}
+
+.filter-reset {
+    padding: 0.5rem 1.25rem;
+    background-color: white;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    border-radius: 0.35rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.filter-reset i {
+    margin-right: 0.5rem;
+}
+
+.filter-reset:hover {
+    background-color: #f8f9fc;
+}
+
+/* ตารางรายการชำระเงิน */
+.payment-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    background-color: white;
+    border-radius: 0.35rem;
+    overflow: hidden;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+}
+
+.payment-list-table th {
+    background-color: #f8f9fc;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--dark);
+    border-bottom: 2px solid #e3e6f0;
+}
+
+.payment-list-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e3e6f0;
+    color: var(--dark);
+}
+
+.payment-list-table tr:last-child td {
+    border-bottom: none;
+}
+
+.payment-list-table tr:hover {
+    background-color: #f8f9fc;
+}
+
+/* สถานะการชำระเงิน */
+.status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-pending {
+    background-color: #f8f4e5;
+    color: var(--warning);
+}
+
+.status-approved {
+    background-color: #e8f5e9;
+    color: var(--success);
+}
+
+.status-cancelled {
+    background-color: #ffebee;
+    color: var(--danger);
+}
+
+/* ปุ่มการทำงาน */
+.payment-action-btns {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.payment-action-btn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.view-payment-btn {
+    background-color: rgba(78, 115, 223, 0.1);
+    color: var(--primary);
+}
+
+.edit-payment-btn {
+    background-color: rgba(246, 194, 62, 0.1);
+    color: var(--warning);
+}
+
+.pay-payment-btn {
+    background-color: rgba(28, 200, 138, 0.1);
+    color: var(--success);
+}
+
+.delete-payment-btn {
+    background-color: rgba(231, 74, 59, 0.1);
+    color: var(--danger);
+}
+
+.payment-action-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* ปุ่มสร้างรายการชำระเงินใหม่ */
+.add-new-payment {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 0.35rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.add-new-payment i {
+    margin-right: 0.5rem;
+}
+
+.add-new-payment:hover {
+    background-color: #2e59d9;
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+/* Modal */
+.payment-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-modal-content {
+    background-color: white;
+    border-radius: 0.35rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    width: 800px;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 1.5rem;
+}
+
+.payment-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.payment-modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.payment-modal-close {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--secondary);
+    cursor: pointer;
+}
+
+.payment-modal-close:hover {
+    color: var(--danger);
+}
+
+.payment-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.payment-form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid #e3e6f0;
+    padding-top: 1.5rem;
+}
+
+.payment-form-cancel {
+    padding: 0.75rem 1.5rem;
+    background-color: white;
+    color: var(--dark);
+    border: 1px solid #d1d3e2;
+    border-radius: 0.35rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.payment-form-cancel:hover {
+    background-color: #f8f9fc;
+}
+
+.payment-form-save {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 0.35rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.payment-form-save:hover {
+    background-color: #2e59d9;
+}
+
+/* ใบเสร็จ */
+.payment-receipt {
+    background-color: white;
+    border-radius: 0.35rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.payment-receipt-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.payment-receipt-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin: 0;
+}
+
+.payment-receipt-action {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.payment-receipt-action button {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 0.35rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.payment-receipt-action button i {
+    margin-right: 0.5rem;
+}
+
+.payment-receipt-print {
+    background-color: var(--primary);
+    color: white;
+}
+
+.payment-receipt-print:hover {
+    background-color: #2e59d9;
+}
+
+.payment-receipt-download {
+    background-color: var(--success);
+    color: white;
+}
+
+.payment-receipt-download:hover {
+    background-color: #169b6b;
+}
+
+.payment-receipt-content {
+    margin-bottom: 1.5rem;
+}
+
+.payment-receipt-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.payment-receipt-info-item h4 {
+    font-size: 0.85rem;
+    color: var(--secondary);
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+}
+
+.payment-receipt-info-item p {
+    font-size: 1rem;
+    color: var(--dark);
+    font-weight: 500;
+    margin: 0;
+}
+
+.payment-receipt-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+
+.payment-receipt-table th {
+    background-color: #f8f9fc;
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--dark);
+    border-bottom: 2px solid #e3e6f0;
+}
+
+.payment-receipt-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e3e6f0;
+    color: var(--dark);
+}
+
+.payment-receipt-total {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-weight: 600;
+    padding-top: 1rem;
+    border-top: 2px solid #e3e6f0;
+}
+
+.payment-receipt-total-label {
+    margin-right: 1rem;
+    color: var(--dark);
+}
+
+.payment-receipt-total-amount {
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.pagination-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    border: 1px solid #d1d3e2;
+    background-color: white;
+    color: var(--dark);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pagination-btn:hover {
+    background-color: #f8f9fc;
+}
+
+.pagination-btn.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .payment-method-card {
+        padding: 1rem;
+    }
+    
+    .payment-receipt-action {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .payment-form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .table-responsive {
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .payment-summary {
+        grid-template-columns: 1fr;
+    }
+    
+    .payment-methods {
+        grid-template-columns: 1fr;
+    }
+    
+    .payment-form-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .payment-form-cancel, .payment-form-save {
+        width: 100%;
+        text-align: center;
+    }
+}

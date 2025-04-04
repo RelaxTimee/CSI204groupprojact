@@ -251,14 +251,42 @@ header {
 }
 
 .activity-list {
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Custom scrollbar for activity list */
+.activity-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.activity-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.activity-list::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}
+
+.activity-list::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
 }
 
 .activity-item {
     display: flex;
     padding: 0.75rem 0;
     border-bottom: 1px solid #f8f9fc;
+    transition: background-color 0.2s;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.activity-item:hover {
+    background-color: #f8f9fc;
+    padding-left: 0.5rem;
 }
 
 .activity-item:last-child {
@@ -276,6 +304,7 @@ header {
     margin-right: 1rem;
     color: var(--primary);
     font-size: 1rem;
+    flex-shrink: 0;
 }
 
 .activity-info {
@@ -283,14 +312,31 @@ header {
 }
 
 .activity-info p {
-    margin: 0;
+    margin: 0 0 0.25rem 0;
     color: var(--dark);
     font-size: 0.9rem;
+    line-height: 1.4;
 }
 
 .activity-info small {
     color: var(--secondary);
     font-size: 0.75rem;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+/* Styles for no data and error messages */
+.no-data, .error-message {
+    padding: 1rem;
+    text-align: center;
+    color: var(--secondary);
+    font-style: italic;
+    background-color: #f8f9fc;
+    border-radius: 0.25rem;
+}
+
+.error-message {
+    color: var(--danger);
 }
 
 /* ===== PROCUREMENT STYLES ===== */

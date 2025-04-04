@@ -3,10 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance Dashboard</title>
+    <title>แดชบอร์ดฝ่ายการเงิน</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* เพิ่มสไตล์เฉพาะสำหรับแดชบอร์ดฝ่ายการเงิน */
+        .stat-card-special {
+            border-left: 4px solid var(--primary);
+        }
+        
+        .budget-summary {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .budget-chart {
+            background-color: white;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 1.5rem;
+            height: 300px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .notification-bell {
+            margin-right: 1.5rem;
+            position: relative;
+        }
+        
+        /* ปรับปรุงสไตล์การ์ด */
+        .stat-card-new {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card-new::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+        }
+        
+        .stat-card-pending::before {
+            background-color: var(--primary);
+        }
+        
+        .stat-card-approved::before {
+            background-color: var(--success);
+        }
+        
+        .stat-card-budget::before {
+            background-color: var(--warning);
+        }
+        
+        .stat-card-approval::before {
+            background-color: var(--danger);
+        }
+        
+        /* ปรับปรุงการ์ดรายการ */
+        .procurement-item-new {
+            border-radius: 0.35rem;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .procurement-item-new:hover {
+            background-color: #f8f9fc;
+            transform: translateX(5px);
+            border-color: #e0e0e0;
+        }
+        
+        /* ปรับปรุงปุ่มดำเนินการ */
+        .action-btn-modern {
+            background-color: white;
+            color: var(--dark);
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: left;
+        }
+        
+        .action-btn-modern i {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            margin-right: 1rem;
+            color: white;
+        }
+        
+        .payment-icon {
+            background-color: var(--primary);
+        }
+        
+        .approval-icon {
+            background-color: var(--success);
+        }
+        
+        .report-icon {
+            background-color: var(--info);
+        }
+        
+        .action-btn-modern:hover {
+            background-color: #f8f9fc;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .alert-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .alert-card {
+            background-color: white;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 1rem;
+            border-left: 4px solid var(--danger);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .alert-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(231, 74, 59, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 1rem;
+            color: var(--danger);
+            font-size: 1.25rem;
+        }
+        
+        .alert-info {
+            flex: 1;
+        }
+        
+        .alert-info h4 {
+            margin: 0;
+            color: var(--dark);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .alert-info p {
+            margin: 0;
+            color: var(--secondary);
+            font-size: 0.85rem;
+        }
+        
+        .alert-action {
+            margin-left: 1rem;
+        }
+        
+        .alert-btn {
+            padding: 0.35rem 0.75rem;
+            background-color: white;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .alert-btn:hover {
+            background-color: var(--danger);
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div class="sidebar">
@@ -16,11 +207,11 @@
         </div>
         <nav>
             <ul>
-                <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="finance-invoice.html"><i class="fas fa-file-invoice-dollar"></i> ใบแจ้งหนี้</a></li>
-                <li><a href="finance-payment.html"><i class="fas fa-credit-card"></i> การชำระเงิน</a></li>
-                <li><a href="finance-approval.html"><i class="fas fa-check-circle"></i> อนุมัติงบประมาณ</a></li>
-                <li><a href="finance-reports.html"><i class="fas fa-chart-pie"></i> รายงานการเงิน</a></li>
+                <li><a href="/finance-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="/finance/finance-invoice/finance-invoice.html"><i class="fas fa-file-invoice-dollar"></i> ใบแจ้งหนี้</a></li>
+                <li><a href="/finance/finance-payment/finance-payment.html"><i class="fas fa-credit-card"></i> การชำระเงิน</a></li>
+                <li><a href="/finance/finance-approval.html"><i class="fas fa-check-circle"></i> อนุมัติงบประมาณ</a></li>
+                <li><a href="/finance/finance-reports.html"><i class="fas fa-chart-pie"></i> รายงานการเงิน</a></li>
             </ul>
         </nav>
     </div>
@@ -32,7 +223,11 @@
                 <i class="fas fa-search"></i>
             </div>
             <div class="user-profile">
-                <span id="username-display"></span>
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-badge">5</div>
+                </div>
+                <span id="username-display">ผู้ดูแลระบบ</span>
                 <div class="avatar">
                     <i class="fas fa-user-circle"></i>
                 </div>
@@ -43,8 +238,25 @@
         <div class="content">
             <h2>แดชบอร์ดฝ่ายการเงิน</h2>
             
+            <!-- ส่วนการแจ้งเตือน -->
+            <div class="alert-section">
+                <div class="alert-card">
+                    <div class="alert-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="alert-info">
+                        <h4>ใบแจ้งหนี้เกินกำหนดชำระ</h4>
+                        <p>มี 2 รายการที่เกินกำหนดชำระ กรุณาตรวจสอบและดำเนินการ</p>
+                    </div>
+                    <div class="alert-action">
+                        <button class="alert-btn" onclick="location.href='finance-invoice.html'">ดูรายละเอียด</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ส่วนสถิติ -->
             <div class="stats-grid">
-                <div class="stat-card">
+                <div class="stat-card stat-card-new stat-card-pending">
                     <div class="stat-icon" style="background-color: #4e73df;">
                         <i class="fas fa-file-invoice"></i>
                     </div>
@@ -53,7 +265,7 @@
                         <p id="pending-invoices">5</p>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card stat-card-new stat-card-approved">
                     <div class="stat-icon" style="background-color: #1cc88a;">
                         <i class="fas fa-check-circle"></i>
                     </div>
@@ -62,7 +274,7 @@
                         <p id="paid-today">2</p>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card stat-card-new stat-card-budget">
                     <div class="stat-icon" style="background-color: #f6c23e;">
                         <i class="fas fa-money-bill-wave"></i>
                     </div>
@@ -71,7 +283,7 @@
                         <p id="budget-remaining">฿1,245,600</p>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card stat-card-new stat-card-approval">
                     <div class="stat-icon" style="background-color: #e74a3b;">
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
@@ -82,11 +294,19 @@
                 </div>
             </div>
             
+            <!-- ส่วนกราฟงบประมาณ -->
+            <div class="budget-summary">
+                <div class="budget-chart">
+                    <canvas id="budgetChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+            
+            <!-- ส่วนรายการ -->
             <div class="procurement-section">
                 <div class="procurement-card">
-                    <h3>ใบแจ้งหนี้ล่าสุด</h3>
+                    <h3><i class="fas fa-file-invoice-dollar"></i> ใบแจ้งหนี้ล่าสุด</h3>
                     <div class="procurement-list" id="recent-invoices">
-                        <div class="procurement-item">
+                        <div class="procurement-item procurement-item-new">
                             <div class="procurement-item-info">
                                 <p><strong>INV-2024-0015</strong> - อุปกรณ์สำนักงาน</p>
                                 <small>ผู้ขาย: บริษัท ออฟฟิศแมท จำกัด | วันที่ 28/03/2024</small>
@@ -95,7 +315,7 @@
                                 <span class="status-badge status-pending">รอชำระ</span>
                             </div>
                         </div>
-                        <div class="procurement-item">
+                        <div class="procurement-item procurement-item-new">
                             <div class="procurement-item-info">
                                 <p><strong>INV-2024-0014</strong> - คอมพิวเตอร์โน้ตบุ๊ค</p>
                                 <small>ผู้ขาย: บริษัท คอมเทค จำกัด | วันที่ 27/03/2024</small>
@@ -104,7 +324,7 @@
                                 <span class="status-badge status-pending">รอชำระ</span>
                             </div>
                         </div>
-                        <div class="procurement-item">
+                        <div class="procurement-item procurement-item-new">
                             <div class="procurement-item-info">
                                 <p><strong>INV-2024-0013</strong> - เครื่องถ่ายเอกสาร</p>
                                 <small>ผู้ขาย: บริษัท ดิจิทัลโซลูชัน จำกัด | วันที่ 26/03/2024</small>
@@ -118,9 +338,9 @@
                 </div>
                 
                 <div class="procurement-card">
-                    <h3>งบประมาณรออนุมัติ</h3>
+                    <h3><i class="fas fa-check-circle"></i> งบประมาณรออนุมัติ</h3>
                     <div class="procurement-list" id="pending-budget-approvals">
-                        <div class="procurement-item">
+                        <div class="procurement-item procurement-item-new">
                             <div class="procurement-item-info">
                                 <p><strong>PR-2024-0058</strong> - เฟอร์นิเจอร์สำนักงาน</p>
                                 <small>เสนอโดย: ฝ่ายจัดซื้อ | วันที่ 27/03/2024</small>
@@ -129,7 +349,7 @@
                                 <span class="status-badge status-pending">รออนุมัติ</span>
                             </div>
                         </div>
-                        <div class="procurement-item">
+                        <div class="procurement-item procurement-item-new">
                             <div class="procurement-item-info">
                                 <p><strong>PR-2024-0057</strong> - อุปกรณ์คอมพิวเตอร์</p>
                                 <small>เสนอโดย: ฝ่ายจัดซื้อ | วันที่ 26/03/2024</small>
@@ -138,7 +358,7 @@
                                 <span class="status-badge status-pending">รออนุมัติ</span>
                             </div>
                         </div>
-                        <div class="procurement-item">
+                        <div class="procurement-item procurement-item-new">
                             <div class="procurement-item-info">
                                 <p><strong>PR-2024-0056</strong> - อุปกรณ์สำนักงาน</p>
                                 <small>เสนอโดย: ฝ่ายจัดซื้อ | วันที่ 25/03/2024</small>
@@ -153,22 +373,23 @@
             </div>
             
             <div class="quick-actions">
-                <h3>ดำเนินการด่วน</h3>
+                <h3><i class="fas fa-bolt"></i> ดำเนินการด่วน</h3>
                 <div class="action-buttons">
-                    <button class="action-btn" onclick="location.href='finance-payment.html'">
-                        <i class="fas fa-money-bill-wave"></i> ทำรายการชำระเงิน
+                    <button class="action-btn action-btn-modern" onclick="location.href='finance-payment.html'">
+                        <i class="fas fa-money-bill-wave payment-icon"></i> ทำรายการชำระเงิน
                     </button>
-                    <button class="action-btn" onclick="location.href='finance-approval.html'">
-                        <i class="fas fa-check-circle"></i> อนุมัติงบประมาณ
+                    <button class="action-btn action-btn-modern" onclick="location.href='finance-approval.html'">
+                        <i class="fas fa-check-circle approval-icon"></i> อนุมัติงบประมาณ
                     </button>
-                    <button class="action-btn" onclick="location.href='finance-reports.html'">
-                        <i class="fas fa-chart-line"></i> ดูรายงานประจำเดือน
+                    <button class="action-btn action-btn-modern" onclick="location.href='finance-reports.html'">
+                        <i class="fas fa-chart-line report-icon"></i> ดูรายงานประจำเดือน
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script src="dashboard.js"></script>
     <script src="auth.js"></script>
     <script>
@@ -184,9 +405,195 @@
                 return;
             }
             
-            // เพิ่มฟังก์ชันอื่นๆ เฉพาะของหน้า Finance Dashboard ตรงนี้
-            // ...
+            // แสดงชื่อผู้ใช้
+            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+            document.getElementById('username-display').textContent = username || 'ผู้ใช้งาน';
+            
+            // แสดงกราฟงบประมาณ
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            const budgetChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
+                    datasets: [{
+                        label: 'งบประมาณที่ใช้ไป (บาท)',
+                        data: [450000, 380000, 520000, 390000, 280000, 0],
+                        backgroundColor: [
+                            'rgba(78, 115, 223, 0.8)',
+                            'rgba(78, 115, 223, 0.8)',
+                            'rgba(78, 115, 223, 0.8)',
+                            'rgba(78, 115, 223, 0.8)',
+                            'rgba(78, 115, 223, 0.8)',
+                            'rgba(78, 115, 223, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(78, 115, 223, 1)',
+                            'rgba(78, 115, 223, 1)',
+                            'rgba(78, 115, 223, 1)',
+                            'rgba(78, 115, 223, 1)',
+                            'rgba(78, 115, 223, 1)',
+                            'rgba(78, 115, 223, 1)'
+                        ],
+                        borderWidth: 1
+                    }, {
+                        label: 'งบประมาณที่ได้รับจัดสรร (บาท)',
+                        data: [500000, 500000, 500000, 500000, 500000, 500000],
+                        type: 'line',
+                        fill: false,
+                        borderColor: 'rgba(28, 200, 138, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(28, 200, 138, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(28, 200, 138, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '฿' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'สรุปงบประมาณประจำปี 2024',
+                            font: {
+                                size: 16,
+                                family: 'Prompt'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += '฿' + context.parsed.y.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+            
+            // เชื่อมโยงข้อมูลระหว่างหน้า dashboard และหน้าอื่นๆ ในระบบฝ่ายการเงิน
+            const invoiceData = localStorage.getItem('financeInvoiceData');
+            const approvalData = localStorage.getItem('financeApprovalData');
+            
+            // หากมีข้อมูลใบแจ้งหนี้ในระบบแล้ว ให้แสดงผลตามข้อมูลนั้น
+            if (invoiceData) {
+                try {
+                    const invoices = JSON.parse(invoiceData);
+                    const pendingCount = invoices.filter(inv => inv.status === 'รอชำระ').length;
+                    document.getElementById('pending-invoices').textContent = pendingCount;
+                    
+                    // แสดงใบแจ้งหนี้ล่าสุด
+                    if (invoices.length > 0) {
+                        const recentInvoices = invoices.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
+                        updateRecentInvoices(recentInvoices);
+                    }
+                } catch (error) {
+                    console.error('Error parsing invoice data:', error);
+                }
+            }
+            
+            // หากมีข้อมูลการอนุมัติในระบบแล้ว ให้แสดงผลตามข้อมูลนั้น
+            if (approvalData) {
+                try {
+                    const approvals = JSON.parse(approvalData);
+                    const pendingCount = approvals.filter(apr => apr.status === 'รออนุมัติ').length;
+                    document.getElementById('pending-approvals').textContent = pendingCount;
+                    
+                    // แสดงรายการรออนุมัติล่าสุด
+                    if (approvals.length > 0) {
+                        const pendingApprovals = approvals.filter(apr => apr.status === 'รออนุมัติ').slice(0, 3);
+                        updatePendingApprovals(pendingApprovals);
+                    }
+                } catch (error) {
+                    console.error('Error parsing approval data:', error);
+                }
+            }
+            
+            // ฟังก์ชันสำหรับอัพเดตรายการใบแจ้งหนี้ล่าสุด
+            function updateRecentInvoices(invoices) {
+                const container = document.getElementById('recent-invoices');
+                if (!container) return;
+                
+                container.innerHTML = '';
+                
+                invoices.forEach(invoice => {
+                    const formattedDate = new Date(invoice.date).toLocaleDateString('th-TH', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+                    
+                    const statusClass = invoice.status === 'รอชำระ' ? 'status-pending' : 'status-approved';
+                    
+                    const invoiceElement = document.createElement('div');
+                    invoiceElement.className = 'procurement-item procurement-item-new';
+                    invoiceElement.innerHTML = `
+                        <div class="procurement-item-info">
+                            <p><strong>${invoice.number}</strong> - ${invoice.description}</p>
+                            <small>ผู้ขาย: ${invoice.vendor} | วันที่ ${formattedDate}</small>
+                        </div>
+                        <div class="procurement-item-status">
+                            <span class="status-badge ${statusClass}">${invoice.status}</span>
+                        </div>
+                    `;
+                    
+                    container.appendChild(invoiceElement);
+                });
+            }
+            
+            // ฟังก์ชันสำหรับอัพเดตรายการรออนุมัติ
+            function updatePendingApprovals(approvals) {
+                const container = document.getElementById('pending-budget-approvals');
+                if (!container) return;
+                
+                container.innerHTML = '';
+                
+                approvals.forEach(approval => {
+                    const formattedDate = new Date(approval.date).toLocaleDateString('th-TH', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+                    
+                    const approvalElement = document.createElement('div');
+                    approvalElement.className = 'procurement-item procurement-item-new';
+                    approvalElement.innerHTML = `
+                        <div class="procurement-item-info">
+                            <p><strong>${approval.number}</strong> - ${approval.description}</p>
+                            <small>เสนอโดย: ${approval.department} | วันที่ ${formattedDate}</small>
+                        </div>
+                        <div class="procurement-item-status">
+                            <span class="status-badge status-pending">${approval.status}</span>
+                        </div>
+                    `;
+                    
+                    container.appendChild(approvalElement);
+                });
+            }
         });
     </script>
+    <script src="logger.js"></script>
+    <script src="auth.js"></script>
 </body>
 </html>

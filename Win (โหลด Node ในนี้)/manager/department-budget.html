@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>งบประมาณ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../dashboard.css">
+    <style>
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filter-label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .filter-select {
+            padding: 0.5rem;
+            border-radius: 0.35rem;
+            border: 1px solid #d1d3e2;
+            min-width: 120px;
+        }
+        
+        .budget-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .summary-card {
+            background-color: white;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 1.5rem;
+        }
+        
+        .summary-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: #e9ecef;
+            border-radius: 0.25rem;
+            height: 10px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            border-radius: 0.25rem;
+        }
+        
+        .progress-normal {
+            background-color: #4e73df;
+        }
+        
+        .progress-warning {
+            background-color: #f6c23e;
+        }
+        
+        .progress-danger {
+            background-color: #e74a3b;
+        }
+        
+        .progress-success {
+            background-color: #1cc88a;
+        }
+        
+        .budget-detail {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .budget-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .budget-card {
+            background-color: white;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 1.5rem;
+        }
+        
+        .budget-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .budget-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .budget-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+        
+        .budget-info {
+            margin-bottom: 1rem;
+        }
+        
+        .budget-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .budget-metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+        
+        .budget-label {
+            color: var(--secondary);
+        }
+        
+        .budget-amount {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .budget-chart {
+            height: 200px;
+            margin-top: 1rem;
+            position: relative;
+        }
+        
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fc;
+            border-radius: 0.35rem;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .budget-history {
+            background-color: white;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .budget-history-header {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e3e6f0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .budget-table th,
+        .budget-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .budget-table th {
+            background-color: #f8f9fc;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .budget-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .budget-table tr:hover {
+            background-color: #f8f9fc;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background-color: #f8f4e5;
+            color: #e6a23c;
+        }
+        
+        .status-approved {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+        
+        .status-rejected {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+        
+        .btn-table {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .btn-view {
+            background-color: #4e73df;
+            color: white;
+        }
+        
+        .btn-table:hover {
+            transform: translateY(-2px);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .pagination-item {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.35rem;
+            background-color: white;
+            border: 1px solid #d1d3e2;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        .pagination-item.active,
+        .pagination-item:hover {
+            background-color: #4e73df;
+            color: white;
+            border-color: #4e73df;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fas fa-user-tie"></i>
+            <h1>ผู้จัดการ</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../manager-dashboard.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="approval-request.html"><i class="fas fa-clipboard-check"></i> <span>คำขออนุมัติ</span></a></li>
+                <!-- <li><a href="manager-procurement.html"><i class="fas fa-shopping-cart"></i> <span>การจัดซื้อ</span></a></li> -->
+                <li class="active"><a href="department-budget.html"><i class="fas fa-money-bill-alt"></i> <span>งบประมาณ</span></a></li>
+                <!-- <li><a href="manager-reports.html"><i class="fas fa-chart-line"></i> <span>รายงานผลการดำเนินงาน</span></a></li> -->
+            </ul>
+        </nav>
+    </div>
+    
+    <div class="main-content">
+        <header>
+            <div class="search-bar">
+                <input type="text" placeholder="ค้นหา...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="user-profile">
+                <span id="username-display">Manager</span>
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+        
+        <div class="content">
+            <h2>งบประมาณ</h2>
+            
+            <div class="filter-container">
+                <div class="filter-group">
+                    <div class="filter-label">ปี:</div>
+                    <select class="filter-select" id="year-filter">
+                        <option value="2024" selected>2024</option>
+                        <option value="2023">2023</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <div class="filter-label">ไตรมาส:</div>
+                    <select class="filter-select" id="quarter-filter">
+                        <option value="all">ทั้งปี</option>
+                        <option value="Q1">Q1 (ม.ค. - มี.ค.)</option>
+                        <option value="Q2" selected>Q2 (เม.ย. - มิ.ย.)</option>
+                        <option value="Q3">Q3 (ก.ค. - ก.ย.)</option>
+                        <option value="Q4">Q4 (ต.ค. - ธ.ค.)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="budget-summary">
+                <div class="summary-card">
+                    <div class="summary-title">งบประมาณทั้งหมด</div>
+                    <div class="summary-value" id="total-budget">฿0</div>
+                    <!-- <div class="budget-detail">
+                        <span>งบประมาณสินทรัพย์ถาวร:</span>
+                        <span id="capital-budget">฿0</span>
+                    </div>
+                    <div class="budget-detail">
+                        <span>งบประมาณดำเนินงาน:</span>
+                        <span id="operating-budget">฿0</span>
+                    </div> -->
+                </div>
+                <div class="summary-card">
+                    <div class="summary-title">ใช้ไปแล้ว</div>
+                    <div class="summary-value" id="used-budget">฿0 (0%)</div>
+                    <div class="progress-container">
+                        <div class="progress-bar progress-normal" style="width: 0%;"></div>
+                    </div>
+                    <div class="budget-detail">
+                        <span>งบประมาณคงเหลือ:</span>
+                        <span id="remaining-budget">฿0</span>
+                    </div>
+                </div>
+            </div>
+         
+            </div>
+            
+            
+            <div class="budget-history">
+                <div class="budget-history-header">ประวัติการใช้งบประมาณล่าสุด</div>
+                <table class="budget-table">
+                    <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>เลขที่เอกสาร</th>
+                     
+                            <th>รายละเอียด</th>
+                            <th>ประเภท</th>
+                            <th>จำนวนเงิน</th>
+                            <th>สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01/04/2024</td>
+                            <td>PO-2024-0042</td>
+                        
+                            <td>เฟอร์นิเจอร์สำนักงาน</td>
+                            <td>สินทรัพย์ถาวร</td>
+                            <td>฿45,000.00</td>
+                            <td><span class="status-badge status-approved">อนุมัติแล้ว</span></td>
+                        </tr>
+                        <tr>
+                            <td>28/03/2024</td>
+                            <td>PO-2024-0041</td>
+                       
+                            <td>อุปกรณ์คอมพิวเตอร์</td>
+                            <td>สินทรัพย์ถาวร</td>
+                            <td>฿85,600.00</td>
+                            <td><span class="status-badge status-approved">อนุมัติแล้ว</span></td>
+                        </tr>
+                        <tr>
+                            <td>25/03/2024</td>
+                            <td>PO-2024-0040</td>
+                           
+                            <td>อุปกรณ์สำนักงาน</td>
+                            <td>วัสดุสิ้นเปลือง</td>
+                            <td>฿18,200.00</td>
+                            <td><span class="status-badge status-approved">อนุมัติแล้ว</span></td>
+                        </tr>
+                        <tr>
+                            <td>20/03/2024</td>
+                            <td>PO-2024-0039</td>
+                          
+                            <td>เซิร์ฟเวอร์</td>
+                            <td>สินทรัพย์ถาวร</td>
+                            <td>฿120,000.00</td>
+                            <td><span class="status-badge status-approved">อนุมัติแล้ว</span></td>
+                        </tr>
+                        <tr>
+                            <td>15/03/2024</td>
+                            <td>PO-2024-0038</td>
+                          
+                            <td>อุปกรณ์สำนักงาน</td>
+                            <td>วัสดุสิ้นเปลือง</td>
+                            <td>฿12,500.00</td>
+                            <td><span class="status-badge status-approved">อนุมัติแล้ว</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <div class="pagination-item">
+                        <i class="fas fa-chevron-left"></i>
+                    </div>
+                    <div class="pagination-item active">1</div>
+                    <div class="pagination-item">2</div>
+                    <div class="pagination-item">3</div>
+                    <div class="pagination-item">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ตรวจสอบว่าผู้ใช้มี role_id = 2 (Manager)
+            const roleId = localStorage.getItem('role_id') || sessionStorage.getItem('role_id');
+            if (roleId != 2) {
+                // ถ้าเข้าถึงหน้านี้ด้วย role ที่ไม่ใช่ Manager ให้แสดงข้อความเตือน
+                alert('คุณไม่มีสิทธิ์เข้าถึงหน้านี้');
+                // และ redirect ไปยังหน้าที่เหมาะสมตาม role
+                redirectBasedOnRole(roleId);
+                return;
+            }
+            
+            // แสดงชื่อผู้ใช้
+            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+            if (username) {
+                document.getElementById('username-display').textContent = username;
+            }
+            
+            // โหลดข้อมูลงบประมาณ
+            loadBudgetData();
+            
+            // เพิ่ม event listener สำหรับฟิลเตอร์
+            document.getElementById('year-filter').addEventListener('change', function() {
+                loadBudgetData();
+            });
+            
+            document.getElementById('quarter-filter').addEventListener('change', function() {
+                loadBudgetData();
+            });
+            
+            // ปุ่มออกจากระบบ
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
+                    localStorage.removeItem('jwtToken');
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('role_id');
+                    sessionStorage.removeItem('jwtToken');
+                    sessionStorage.removeItem('username');
+                    sessionStorage.removeItem('role_id');
+                    window.location.href = '../login.html';
+                }
+            });
+        });
+        
+        // โหลดข้อมูลงบประมาณ
+        function loadBudgetData() {
+            // ในระบบจริง จะดึงข้อมูลจาก API โดยใช้ filters
+            const yearFilter = document.getElementById('year-filter').value;
+            const quarterFilter = document.getElementById('quarter-filter').value;
+            
+            console.log('โหลดข้อมูลงบประมาณด้วยฟิลเตอร์:', {
+                year: yearFilter,
+                quarter: quarterFilter
+            });
+            
+            // ตัวอย่างการแสดงผลข้อมูล (ในระบบจริงจะดึงข้อมูลจาก API)
+            // ...
+        }
+        
+
+        // Function to load budget data from API
+// async function loadBudgetData() {
+//     try {
+//         // Get selected year and quarter
+//         const yearFilter = document.getElementById('year-filter').value;
+//         const quarterFilter = document.getElementById('quarter-filter').value;
+
+//         // Get JWT token for authentication
+//         const token = localStorage.getItem('jwtToken') || sessionStorage.getItem('jwtToken');
+        
+//         if (!token) {
+//             throw new Error('No authentication token found');
+//         }
+
+//         // Fetch annual budget data
+//         const budgetResponse = await fetch('/api/annual-budgets', {
+//             method: 'GET',
+//             headers: {
+//                 'Authorization': `Bearer ${token}`,
+//                 'Content-Type': 'application/json'
+//             }
+//         });
+
+//         if (!budgetResponse.ok) {
+//             throw new Error('Failed to fetch budget data');
+//         }
+
+//         const budgetData = await budgetResponse.json();
+
+//         // Find the budget for the selected year
+//         const selectedYearBudget = budgetData.find(budget => budget.fiscal_year == yearFilter);
+
+//         if (!selectedYearBudget) {
+//             throw new Error(`No budget data found for year ${yearFilter}`);
+//         }
+
+//         // Fetch budget transactions
+//         const transactionsResponse = await fetch(`/api/budget-transactions?year=${yearFilter}&quarter=${quarterFilter}`, {
+//             method: 'GET',
+//             headers: {
+//                 'Authorization': `Bearer ${token}`,
+//                 'Content-Type': 'application/json'
+//             }
+//         });
+
+//         if (!transactionsResponse.ok) {
+//             throw new Error('Failed to fetch budget transactions');
+//         }
+
+//         const transactions = await transactionsResponse.json();
+
+//         // Calculate total used budget
+//         const usedBudget = transactions.reduce((total, transaction) => total + parseFloat(transaction.amount), 0);
+//         const totalBudget = parseFloat(selectedYearBudget.total_amount);
+//         const capitalBudget = parseFloat(selectedYearBudget.capital_budget);
+//         const operatingBudget = parseFloat(selectedYearBudget.operating_budget);
+
+//         // Update budget summary
+//         document.getElementById('total-budget').textContent = `฿${totalBudget.toLocaleString()}`;
+//         document.getElementById('used-budget').textContent = `฿${usedBudget.toLocaleString()} (${((usedBudget / totalBudget) * 100).toFixed(2)}%)`;
+//         document.getElementById('remaining-budget').textContent = `฿${(totalBudget - usedBudget).toLocaleString()}`;
+
+//         // Update progress bar
+//         const progressBar = document.querySelector('.progress-bar');
+//         const progressPercentage = (usedBudget / totalBudget) * 100;
+//         progressBar.style.width = `${progressPercentage}%`;
+//         progressBar.classList.remove('progress-normal', 'progress-warning', 'progress-danger');
+        
+//         if (progressPercentage < 50) {
+//             progressBar.classList.add('progress-normal');
+//         } else if (progressPercentage < 75) {
+//             progressBar.classList.add('progress-warning');
+//         } else {
+//             progressBar.classList.add('progress-danger');
+//         }
+
+//         // Update budget breakdown
+//         document.getElementById('capital-budget').textContent = `฿${capitalBudget.toLocaleString()}`;
+//         document.getElementById('operating-budget').textContent = `฿${operatingBudget.toLocaleString()}`;
+
+//         // Update budget history table
+//         const budgetHistoryTable = document.querySelector('.budget-table tbody');
+//         budgetHistoryTable.innerHTML = ''; // Clear existing rows
+
+//         transactions.sort((a, b) => new Date(b.transaction_date) - new Date(a.transaction_date)).forEach(transaction => {
+//             const row = document.createElement('tr');
+//             row.innerHTML = `
+//                 <td>${new Date(transaction.transaction_date).toLocaleDateString('th-TH')}</td>
+//                 <td>${transaction.po_id || transaction.pr_id || '-'}</td>
+//                 <td>${transaction.description}</td>
+//                 <td>${transaction.transaction_type === 'capital' ? 'สินทรัพย์ถาวร' : 'พัสดุสิ้นเปลือง'}</td>
+//                 <td>฿${parseFloat(transaction.amount).toLocaleString()}</td>
+//                 <td><span class="status-badge status-approved">อนุมัติแล้ว</span></td>
+//             `;
+//             budgetHistoryTable.appendChild(row);
+//         });
+
+//     } catch (error) {
+//         console.error('Error loading budget data:', error);
+//         alert('เกิดข้อผิดพลาดในการโหลดข้อมูลงบประมาณ');
+//     }
+// }
+
+
+async function loadBudgetData() {
+    try {
+        // Get selected year and quarter
+        const yearFilter = document.getElementById('year-filter').value;
+        const quarterFilter = document.getElementById('quarter-filter').value;
+
+        // Get JWT token for authentication
+        const token = localStorage.getItem('jwtToken') || sessionStorage.getItem('jwtToken');
+        
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
+
+        // Fetch annual budget data
+        const budgetResponse = await fetch('/api/annual-budgets', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!budgetResponse.ok) {
+            throw new Error('Failed to fetch budget data');
+        }
+
+        const budgetData = await budgetResponse.json();
+
+        // Find the budget for the selected year
+        const selectedYearBudget = budgetData.find(budget => budget.fiscal_year == yearFilter);
+
+        if (!selectedYearBudget) {
+            throw new Error(`No budget data found for year ${yearFilter}`);
+        }
+
+        // Fetch budget transactions
+        const transactionsResponse = await fetch(`/api/budget-transactions?year=${yearFilter}&quarter=${quarterFilter}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!transactionsResponse.ok) {
+            throw new Error('Failed to fetch budget transactions');
+        }
+
+        const transactions = await transactionsResponse.json();
+
+        // Calculate total used budget
+        const usedBudget = transactions.reduce((total, transaction) => total + parseFloat(transaction.amount), 0);
+        const totalBudget = parseFloat(selectedYearBudget.total_amount);
+
+        // Update budget summary
+        document.getElementById('total-budget').textContent = `฿${totalBudget.toLocaleString()}`;
+        document.getElementById('used-budget').textContent = `฿${usedBudget.toLocaleString()} (${((usedBudget / totalBudget) * 100).toFixed(2)}%)`;
+        document.getElementById('remaining-budget').textContent = `฿${(totalBudget - usedBudget).toLocaleString()}`;
+
+        // Update progress bar
+        const progressBar = document.querySelector('.progress-bar');
+        const progressPercentage = (usedBudget / totalBudget) * 100;
+        progressBar.style.width = `${progressPercentage}%`;
+        progressBar.classList.remove('progress-normal', 'progress-warning', 'progress-danger');
+        
+        if (progressPercentage < 50) {
+            progressBar.classList.add('progress-normal');
+        } else if (progressPercentage < 75) {
+            progressBar.classList.add('progress-warning');
+        } else {
+            progressBar.classList.add('progress-danger');
+        }
+
+        // Update budget history table
+        const budgetHistoryTable = document.querySelector('.budget-table tbody');
+        budgetHistoryTable.innerHTML = ''; // Clear existing rows
+
+        transactions.sort((a, b) => new Date(b.transaction_date) - new Date(a.transaction_date)).forEach(transaction => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${new Date(transaction.transaction_date).toLocaleDateString('th-TH')}</td>
+                <td>${transaction.po_id || transaction.pr_id || '-'}</td>
+                <td>${transaction.description}</td>
+                <td>${transaction.transaction_type === 'capital' ? 'สินทรัพย์ถาวร' : 'พัสดุสิ้นเปลือง'}</td>
+                <td>฿${parseFloat(transaction.amount).toLocaleString()}</td>
+                <td><span class="status-badge status-approved">อนุมัติแล้ว</span></td>
+            `;
+            budgetHistoryTable.appendChild(row);
+        });
+
+    } catch (error) {
+        console.error('Error loading budget data:', error);
+        alert('เกิดข้อผิดพลาดในการโหลดข้อมูลงบประมาณ');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize budget data loading
+    loadBudgetData();
+
+    // Add event listeners for filters
+    document.getElementById('year-filter').addEventListener('change', loadBudgetData);
+    document.getElementById('quarter-filter').addEventListener('change', loadBudgetData);
+});
+
+
+        // ฟังก์ชัน redirect ตาม role
+        function redirectBasedOnRole(roleId) {
+            switch(roleId) {
+                case '1':
+                    window.location.href = '../admin/admin-dashboard.html';
+                    break;
+                case '3':
+                    window.location.href = '../procurement/procurement-dashboard.html';
+                    break;
+                case '4':
+                    window.location.href = '../finance/finance-dashboard.html';
+                    break;
+                case '5':
+                    window.location.href = '../it/it-dashboard.html';
+                    break;
+                default:
+                    window.location.href = '../login.html';
+            }
+        }
+    </script>
+    <script src=""></script>
+</body>
+</html>

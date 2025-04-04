@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายงานงบประมาณรายปี | ฝ่ายการเงิน</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/finance/finance-reports/finance-reports.css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fas fa-money-bill-wave"></i>
+            <h1>ฝ่ายการเงิน</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/finance-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="/finance/finance-invoice/finance-invoice.html"><i class="fas fa-file-invoice-dollar"></i> ใบแจ้งหนี้</a></li>
+                <li><a href="/finance/finance-payment/finance-payment.html"><i class="fas fa-credit-card"></i> การชำระเงิน</a></li>
+                <li><a href="/finance/finance-approval/finance-approval.html"><i class="fas fa-check-circle"></i> อนุมัติงบประมาณ</a></li>
+                <li class="active"><a href="/finance/finance-reports/finance-reports.html"><i class="fas fa-chart-pie"></i> รายงานงบประมาณ</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <div class="search-bar">
+            </div>
+            <div class="user-profile">
+                <span id="username-display">ผู้ดูแลระบบ</span>
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+
+        <div class="content">
+            <h2>รายงานงบประมาณรายปี</h2>
+
+            <!-- สรุปข้อมูลงบประมาณ -->
+            <div class="financial-summary">
+                <div class="summary-card income">
+                    <h4>งบประมาณทั้งหมด</h4>
+                    <p id="total-budget">฿3,500,000</p>
+                   
+                </div>
+                <div class="summary-card expense">
+                    <h4>งบที่ถูกใช้ไปแล้ว</h4>
+                    <p id="used-budget">฿1,250,000</p>
+                    
+                </div>
+                <div class="summary-card expected">
+                    <h4>งบที่คาดว่าจะใช้</h4>
+                    <p id="expected-budget">฿850,000</p>
+                    
+                </div>
+                <div class="summary-card remaining">
+                    <h4>งบประมาณคงเหลือ</h4>
+                    <p id="remaining-budget">฿1,400,000</p>
+                    
+                </div>
+            </div>
+  
+            <script src="/dashboard.js"></script>
+    <script src="/finance/finance-reports/finance-reports.js"></script>
+</body>
+
+</html>

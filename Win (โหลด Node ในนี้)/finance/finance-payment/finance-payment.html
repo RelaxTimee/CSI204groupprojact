@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>การชำระเงิน | ฝ่ายการเงิน</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/dashboard.css">
+    <link rel="stylesheet" href="/finance/finance-payment/finance-payment.css">
+    <!-- เพิ่ม CSS variables -->
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --danger: #e74a3b;
+            --warning: #f6c23e;
+            --dark: #5a5c69;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fas fa-money-bill-wave"></i>
+            <h1>ฝ่ายการเงิน</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/finance-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="/finance/finance-invoice/finance-invoice.html"><i class="fas fa-file-invoice-dollar"></i> ใบแจ้งหนี้</a></li>
+                <li ><a href="/finance/finance-payment/finance-payment.html"><i class="fas fa-credit-card"></i> การชำระเงิน</a></li>
+                <li><a href="/finance/finance-approval/finance-approval.html"><i class="fas fa-check-circle"></i> อนุมัติงบประมาณ</a></li>
+                <li><a href="/finance/finance-reports/finance-reports.html"><i class="fas fa-chart-pie"></i> รายงานการเงิน</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <div class="main-content">
+        <header>
+            <div class="search-bar">
+                <input type="text" placeholder="ค้นหารายการชำระเงิน...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="user-profile">
+                <span id="username-display">ผู้ดูแลระบบ</span>
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+        
+        <div class="content">
+            <h2>การชำระเงิน</h2>
+            
+            <!-- สรุปข้อมูลการชำระเงิน -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: var(--warning);">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>รอชำระ</h3>
+                        <p id="pending-count">3</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: var(--success);">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>ชำระแล้ว</h3>
+                        <p id="paid-count">12</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: var(--danger);">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>ยกเลิก</h3>
+                        <p id="cancelled-count">1</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: var(--primary);">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>ยอดรวมชำระแล้ว</h3>
+                        <p id="total-paid">฿358,200</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ตัวกรองข้อมูล -->
+            <div class="payment-filter">
+                <div class="filter-form">
+                    <div class="form-group">
+                        <label>วันที่เริ่มต้น</label>
+                        <input type="date" id="start-date">
+                    </div>
+                    <div class="form-group">
+                        <label>วันที่สิ้นสุด</label>
+                        <input type="date" id="end-date">
+                    </div>
+                    <div class="form-group">
+                        <label>สถานะ</label>
+                        <select id="status-filter">
+                            <option value="">ทั้งหมด</option>
+                            <option value="รอชำระ">รอชำระ</option>
+                            <option value="ชำระแล้ว">ชำระแล้ว</option>
+                            <option value="ยกเลิก">ยกเลิก</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>ช่องทางการชำระ</label>
+                        <select id="payment-method-filter">
+                            <option value="">ทั้งหมด</option>
+                            <option value="โอนเงิน">โอนเงิน</option>
+                            <option value="เช็ค">เช็ค</option>
+                            <option value="บัตรเครดิต">บัตรเครดิต</option>
+                            <option value="เงินสด">เงินสด</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="align-self: flex-end;">
+                        <div>
+                            <button class="filter-btn" id="filter-btn"><i class="fas fa-filter"></i> กรอง</button>
+                            <button class="filter-reset" id="reset-btn"><i class="fas fa-undo"></i> รีเซ็ต</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ปุ่มสร้างรายการชำระเงินใหม่ -->
+            <button class="add-new-payment" id="add-payment-btn">
+                <i class="fas fa-plus"></i> สร้างรายการชำระเงินใหม่
+            </button>
+            
+            <!-- ตารางรายการชำระเงิน -->
+            <div class="table-responsive">
+                <table class="payment-list-table">
+                    <thead>
+                        <tr>
+                            <th>เลขที่</th>
+                            <th>ใบแจ้งหนี้</th>
+                            <th>ผู้รับเงิน</th>
+                            <th>วันที่ชำระ</th>
+                            <th>จำนวนเงิน</th>
+                            <th>ช่องทางชำระ</th>
+                            <th>สถานะ</th>
+                            <th>การทำงาน</th>
+                        </tr>
+                    </thead>
+                    <tbody id="payment-table-body">
+                        <!-- ข้อมูลจะถูกเพิ่มโดย JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <!-- ข้อมูลจะถูกเพิ่มโดย JavaScript -->
+            </div>
+            
+            <!-- Modal สร้าง/แก้ไขรายการชำระเงิน -->
+            <div class="payment-modal" id="payment-modal">
+                <div class="payment-modal-content">
+                    <div class="payment-modal-header">
+                        <h3 class="payment-modal-title" id="payment-modal-title">สร้างรายการชำระเงินใหม่</h3>
+                        <button class="payment-modal-close" id="close-payment-modal">&times;</button>
+                    </div>
+                    
+                    <form id="payment-form">
+                        <input type="hidden" id="payment-id">
+                        <!-- ข้อมูลใบแจ้งหนี้ -->
+                        <div class="payment-form-grid">
+                            <div class="form-group">
+                                <label>เลขที่ใบแจ้งหนี้</label>
+                                <select id="invoice-number" name="invoiceNumber" required>
+                                    <option value="">เลือกใบแจ้งหนี้</option>
+                                    <!-- ตัวเลือกจะถูกเพิ่มโดย JavaScript -->
+                                </select>
+                            </div>    
+                            <div class="form-group">
+                                <label>วันที่ชำระ</label>
+                                <input type="date" id="payment-date" name="paymentDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>จำนวนเงิน</label>
+                                <input type="number" id="amount" name="amount" required>
+                            </div>
+                            <div class="form-group">
+                                <label>ช่องทางการชำระ</label>
+                                <select id="payment-method" name="paymentMethod" required>
+                                    <option value="">เลือกช่องทางการชำระ</option>
+                                    <option value="โอนเงิน">โอนเงิน</option>
+                                    <option value="เช็ค">เช็ค</option>
+                                    <option value="บัตรเครดิต">บัตรเครดิต</option>
+                                    <option value="เงินสด">เงินสด</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>ผู้รับเงิน</label>
+                                <input type="text" id="payee" name="payee" required>
+                            </div>
+                            <div class="form-group">
+                                <label>หมายเหตุ</label>
+                                <textarea id="notes" name="notes" rows="3"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-form-footer">
+                            <button type="button" class="payment-form-cancel" id="cancel-payment-btn">ยกเลิก</button>
+                            <button type="submit" class="payment-form-save">บันทึก</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Modal รายละเอียดการชำระเงิน -->
+            <div class="payment-modal" id="payment-detail-modal">
+                <div class="payment-modal-content">
+                    <div class="payment-modal-header">
+                        <h3 class="payment-modal-title">รายละเอียดการชำระเงิน</h3>
+                        <button class="payment-modal-close" id="close-detail-modal">&times;</button>
+                    </div>
+                    
+                    <div class="payment-receipt">
+                        <div class="payment-receipt-header">
+                            <h4 class="payment-receipt-title">ใบเสร็จรับเงิน / ใบกำกับภาษี</h4>
+                            <div class="payment-receipt-action">
+                                <button class="payment-receipt-print" id="print-receipt-btn"><i class="fas fa-print"></i> พิมพ์</button>
+                                <button class="payment-receipt-download" id="download-receipt-btn"><i class="fas fa-download"></i> ดาวน์โหลด</button>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-receipt-content">
+                            <div class="payment-receipt-info">
+                                <div class="payment-receipt-info-item">
+                                    <h4>เลขที่</h4>
+                                    <p id="detail-payment-id"></p>
+                                </div>
+                                <div class="payment-receipt-info-item">
+                                    <h4>วันที่ชำระเงิน</h4>
+                                    <p id="detail-payment-date"></p>
+                                </div>
+                                <div class="payment-receipt-info-item">
+                                    <h4>สถานะ</h4>
+                                    <p id="detail-status"></p>
+                                </div>
+                                <div class="payment-receipt-info-item">
+                                    <h4>ช่องทางการชำระเงิน</h4>
+                                    <p id="detail-payment-method"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-receipt-info">
+                                <div class="payment-receipt-info-item">
+                                    <h4>ผู้รับเงิน</h4>
+                                    <p id="detail-payee"></p>
+                                </div>
+                                <div class="payment-receipt-info-item">
+                                    <h4>อ้างอิงใบแจ้งหนี้</h4>
+                                    <p id="detail-invoice-number"></p>
+                                </div>
+                                <div class="payment-receipt-info-item">
+                                    <h4>รายละเอียด</h4>
+                                    <p id="detail-description"></p>
+                                </div>
+                            </div>
+                            
+                            <table class="payment-receipt-table">
+                                <thead>
+                                    <tr>
+                                        <th>รายการ</th>
+                                        <th>จำนวนเงิน</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detail-items">
+                                    <!-- รายการสินค้าจะถูกเพิ่มโดย JavaScript -->
+                                </tbody>
+                            </table>
+                            
+                            <div class="payment-receipt-total">
+                                <span class="payment-receipt-total-label">ยอดรวมทั้งสิ้น:</span>
+                                <span class="payment-receipt-total-amount" id="detail-total-amount"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-modal-footer">
+                        <button class="payment-form-cancel" id="close-detail-btn">ปิด</button>
+                        <button class="payment-form-save" id="edit-payment-btn">แก้ไข</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal ยืนยันการลบ -->
+            <div class="payment-modal" id="confirm-delete-modal">
+                <div class="payment-modal-content" style="max-width: 400px;">
+                    <div class="payment-modal-header">
+                        <h3 class="payment-modal-title">ยืนยันการลบรายการ</h3>
+                        <button class="payment-modal-close" id="close-confirm-modal">&times;</button>
+                    </div>
+                    
+                    <div style="padding: 20px; text-align: center;">
+                        <p>คุณต้องการลบรายการชำระเงิน <span id="delete-payment-id"></span> ใช่หรือไม่?</p>
+                        <p>การดำเนินการนี้ไม่สามารถเรียกคืนได้</p>
+                    </div>
+                    
+                    <div class="payment-modal-footer">
+                        <button class="payment-form-cancel" id="cancel-delete-btn">ยกเลิก</button>
+                        <button class="payment-form-save" style="background-color: var(--danger);" id="confirm-delete-btn">ยืนยันการลบ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/finance/finance-payment/finance-payment.js"></script>
+</body>
+</html>

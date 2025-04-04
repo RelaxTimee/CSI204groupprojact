@@ -121,12 +121,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 sessionStorage.setItem('username', result.username);
                 sessionStorage.setItem('role_id', result.role_id);
             }
-            
+
+            // Ensure login action is logged using our utility - it's best
+            try {
+                // Try the direct logging endpoint first
+                await fetch('/direct-log', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        role_id: result.role_id,
+                        username: result.username,
+                        action: 'เข้าสู่ระบบ (client)'
+                    })
+                });
+                console.log('Login action logged successfully via direct endpoint');
+            } catch (logError) {
+                console.error('Error logging login action via direct endpoint:', logError);
+
+                // Fallback to the utility function
+                if (window.logUserAction) {
+                    window.logUserAction('เข้าสู่ระบบ (client)', result.username, result.role_id, result.token);
+                }
+            }
+
             // Show success message
             loadingIndicator.style.display = 'none';
             successMessage.style.display = 'block';
             loginForm.style.display = 'none';
-            
+
             // Redirect based on role
             setTimeout(() => {
                 redirectBasedOnRole(result.role_id);

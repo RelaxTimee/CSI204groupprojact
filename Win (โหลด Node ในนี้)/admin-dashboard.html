@@ -12,15 +12,15 @@
     <div class="sidebar">
         <div class="brand">
             <i class="fas fa-crown"></i>
-            <h1>Admin Panel</h1>
+            <h1>IT Panel</h1>
         </div>
         <nav>
             <ul>
                 <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="user-management.html"><i class="fas fa-users"></i> จัดการผู้ใช้</a></li>
+                <!-- <li><a href="user-management.html"><i class="fas fa-users"></i> จัดการผู้ใช้</a></li>
                 <li><a href="procurement-approval.html"><i class="fas fa-clipboard-check"></i> อนุมัติการจัดซื้อ</a></li>
-                <li><a href="finance-reports.html"><i class="fas fa-chart-line"></i> รายงานการเงิน</a></li>
-                <li><a href="system-settings.html"><i class="fas fa-cog"></i> ตั้งค่าระบบ</a></li>
+                <li><a href="finance-reports.html"><i class="fas fa-chart-line"></i> รายงานการเงิน</a></li> -->
+                <li><a href="setting-for-admin.html"><i class="fas fa-cog"></i> ตั้งค่าระบบ</a></li>
             </ul>
         </nav>
     </div>
@@ -52,44 +52,17 @@
                         <p id="total-users">0</p>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background-color: #1cc88a;">
-                        <i class="fas fa-clipboard-list"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>คำขอจัดซื้อ</h3>
-                        <p id="total-requests">0</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background-color: #f6c23e;">
-                        <i class="fas fa-file-invoice-dollar"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>รายการชำระเงิน</h3>
-                        <p id="total-payments">0</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background-color: #e74a3b;">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>ปัญหาที่ต้องแก้ไข</h3>
-                        <p id="total-issues">0</p>
-                    </div>
-                </div>
             </div>
-            
             <div class="recent-activity">
                 <h3>กิจกรรมล่าสุด</h3>
                 <div class="activity-list" id="activity-list">
-                    <!-- Activities will be loaded here -->
+                    
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="logger.js"></script>
     <script src="dashboard.js"></script>
     <script src="auth.js"></script>
 </body>

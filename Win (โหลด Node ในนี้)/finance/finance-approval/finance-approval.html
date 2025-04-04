@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>อนุมัติงบประมาณ | ฝ่ายการเงิน</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/dashboard.css">
+    <link rel="stylesheet" href="/finance/finance-approval/finance-approval.css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fas fa-money-bill-wave"></i>
+            <h1>ฝ่ายการเงิน</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/finance-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="/finance/finance-invoice/finance-invoice.html"><i class="fas fa-file-invoice-dollar"></i> ใบแจ้งหนี้</a></li>
+                <li><a href="/finance/finance-payment/finance-payment.html"><i class="fas fa-credit-card"></i> การชำระเงิน</a></li>
+                <li class="active"><a href="/finance/finance-approval/finance-approval.html"><i class="fas fa-check-circle"></i>
+                        อนุมัติงบประมาณ</a></li>
+                <li><a href="/finance/finance-reports/finance-reports.html"><i class="fas fa-chart-pie"></i> รายงานการเงิน</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <div class="search-bar">
+              
+                </div>
+            <div class="user-profile">
+                <span id="username-display">Finance
+                </span>
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+
+        <div class="content">
+            <!-- ตัวกรองข้อมูล -->
+            <div class="approval-filter">
+                <div class="filter-form">
+                    <div class="form-group">
+                        <label>วันที่</label>
+                        <input type="date" id="start-date">
+                    </div>
+                    <div class="form-group">
+                        <label>สถานะ</label>
+                        <select id="status-filter">
+                            <option value="">ทั้งหมด</option>
+                            <option value="รออนุมัติ">รออนุมัติ</option>
+                            <option value="อนุมัติแล้ว">อนุมัติแล้ว</option>
+                            <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>แผนก/ฝ่าย</label>
+                        <select id="department-filter">
+                            <option value="">ทั้งหมด</option>
+                            <!-- แผนกจะถูกโหลดจาก JavaScript --> 
+                        </select>
+                    </div>
+                    <div class="form-group" style="align-self: flex-end;">
+                        <div>
+                            <button class="filter-btn" id="filter-btn"><i class="fas fa-filter"></i> กรอง</button>
+                            <button class="filter-reset" id="filter-reset-btn"><i class="fas fa-undo"></i>
+                                รีเซ็ต</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ตารางคำขออนุมัติงบประมาณ -->
+            <div class="table-responsive">
+                <table class="approval-table" id="approval-table">
+                    <thead>
+                        <tr>
+                            <th>เลขที่คำขอ</th>
+                            <th>วันที่ขอ</th>
+                            <th>แผนก/ฝ่าย</th>
+                            <th>รายละเอียด</th>
+                            <th>จำนวนเงิน</th>
+                            <th>วันที่ต้องการ</th>
+                            <th>สถานะ</th>
+                            <th>การทำงาน</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- ข้อมูลคำขอจะถูกโหลดจาก JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal รายละเอียดคำขอ -->
+            <div class="approval-modal" id="approvalModal">
+                <div class="approval-modal-content">
+                    <div class="approval-modal-header">
+                        <h3 class="approval-modal-title">รายละเอียดคำขออนุมัติงบประมาณ</h3>
+                        <button class="approval-modal-close" id="modal-close-btn">&times;</button>
+                    </div>
+
+                    <!-- ความก้าวหน้าของคำขอ -->
+                    <div class="approval-progress">
+                        <div class="approval-progress-track">
+                            <div class="approval-progress-fill" style="width: 33%;"></div>
+                        </div>
+                        <div class="approval-progress-steps">
+                            <div class="approval-progress-step completed">
+                                <div class="approval-progress-dot"></div>
+                                <div class="approval-progress-step-label">ยื่นคำขอ</div>
+                            </div>
+                            <div class="approval-progress-step active">
+                                <div class="approval-progress-dot"></div>
+                                <div class="approval-progress-step-label">รออนุมัติ</div>
+                            </div>
+                            <div class="approval-progress-step">
+                                <div class="approval-progress-dot"></div>
+                                <div class="approval-progress-step-label">ดำเนินการจัดซื้อ</div>
+                            </div>
+                            <div class="approval-progress-step">
+                                <div class="approval-progress-dot"></div>
+                                <div class="approval-progress-step-label">เสร็จสิ้น</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="approval-details">
+                        <div class="approval-detail-row">
+                            <div class="approval-detail-label">เลขที่คำขอ</div>
+                            <div class="approval-detail-value" id="modal-request-id"></div>
+                        </div>
+                        <div class="approval-detail-row">
+                            <div class="approval-detail-label">วันที่ขอ</div>
+                            <div class="approval-detail-value" id="modal-request-date"></div>
+                        </div>
+                        <div class="approval-detail-row">
+                            <div class="approval-detail-label">แผนก/ฝ่าย</div>
+                            <div class="approval-detail-value" id="modal-department"></div>
+                        </div>
+                        <div class="approval-detail-row">
+                            <div class="approval-detail-label">ผู้ขออนุมัติ</div>
+                            <div class="approval-detail-value" id="modal-requester"></div>
+                        </div>
+                        <div class="approval-detail-row">
+                            <div class="approval-detail-label">วันที่ต้องการ</div>
+                            <div class="approval-detail-value" id="modal-required-date"></div>
+                        </div>
+                        <div class="approval-detail-row">
+                            <div class="approval-detail-label">เหตุผลความจำเป็น</div>
+                            <div class="approval-detail-value" id="modal-reason"></div>
+                        </div>
+                    </div>
+
+                    <div class="approval-items">
+                        <div class="approval-items-title">รายการที่ขออนุมัติ</div>
+                        <table class="approval-items-table">
+                            <thead>
+                                <tr>
+                                    <th width="40%">รายการ</th>
+                                    <th>จำนวน</th>
+                                    <th>หน่วย</th>
+                                    <th>ราคาต่อหน่วย</th>
+                                    <th>รวมเงิน</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-items">
+                                <!-- รายการสินค้าจะถูกโหลดจาก JavaScript -->
+                            </tbody>
+                        </table>
+                        <div class="approval-items-total">
+                            <div style="margin-right: 1rem;">รวมทั้งสิ้น:</div>
+                            <div id="modal-total">฿0</div>
+                        </div>
+                    </div>
+
+                    <div class="comment-section">
+                        <label class="comment-label" for="approval-comment">ความคิดเห็น:</label>
+                        <textarea id="approval-comment" class="comment-textarea"
+                            placeholder="เพิ่มความคิดเห็นหรือเหตุผลประกอบการพิจารณา"></textarea>
+                    </div>
+
+                    <div class="approval-modal-footer">
+                        <button class="approval-btn cancel-modal-btn" id="cancel-modal-btn">ยกเลิก</button>
+                        <button class="approval-btn reject-modal-btn" id="reject-modal-btn">ไม่อนุมัติ</button>
+                        <button class="approval-btn approve-modal-btn" id="approve-modal-btn">อนุมัติ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/dashboard.js"></script>
+    <script src="/finance/finance-approval/finance-approval.js"></script>
+</body>
+
+</html>

@@ -14,7 +14,38 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // จัดการการล็อกเอาท์
     if (logoutBtn) {
-        logoutBtn.addEventListener('click', function() {
+        logoutBtn.addEventListener('click', async function() {
+            const token = localStorage.getItem('jwtToken') || sessionStorage.getItem('jwtToken');
+            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+            const roleId = localStorage.getItem('role_id') || sessionStorage.getItem('role_id');
+
+            // บันทึก log การออกจากระบบ - it's best
+            if (username && roleId) {
+                try {
+                    // Try the direct logging endpoint
+                    await fetch('/direct-log', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            role_id: roleId,
+                            username: username,
+                            action: 'ออกจากระบบ'
+                        })
+                    });
+                    console.log('Logout action logged successfully via direct endpoint');
+                } catch (error) {
+                    console.error('Error logging logout action via direct endpoint:', error);
+
+                    // Fallback to the utility function if available
+                    if (window.logUserAction) {
+                        window.logUserAction('ออกจากระบบ', username, roleId);
+                    }
+                }
+            }
+
+            // ลบข้อมูลการเข้าสู่ระบบ
             localStorage.removeItem('jwtToken');
             localStorage.removeItem('username');
             localStorage.removeItem('role_id');
@@ -27,23 +58,43 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ฟังก์ชันตรวจสอบการล็อกอิน
+// แก้ไขในไฟล์ auth.js ในส่วนของ checkAuth()
 async function checkAuth() {
     const token = localStorage.getItem('jwtToken') || sessionStorage.getItem('jwtToken');
     const currentPage = window.location.pathname.split('/').pop();
     
     // ถ้าไม่มี token และไม่อยู่หน้า login ให้ redirect ไปหน้า login
     if (!token && currentPage !== 'login.html') {
-        window.location.href = 'login.html';
-        return;
+      window.location.href = 'login.html';
+      return;
     }
     
     // ถ้ามี token และอยู่หน้า login ให้ redirect ไป dashboard ตาม role
     if (token && currentPage === 'login.html') {
-        const roleId = localStorage.getItem('role_id') || sessionStorage.getItem('role_id');
-        redirectBasedOnRole(roleId);
-        return;
+      const roleId = localStorage.getItem('role_id') || sessionStorage.getItem('role_id');
+      const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+      
+      // บันทึก log การเข้าสู่ระบบ
+      try {
+        await fetch('/api/logs', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            role_id: roleId,
+            username: username,
+            action: 'เข้าสู่ระบบ'
+          })
+        });
+      } catch (error) {
+        console.error('Error logging login action:', error);
+      }
+      
+      redirectBasedOnRole(roleId);
+      return;
     }
-    
     // ตรวจสอบ token กับเซิร์ฟเวอร์
     if (token) {
         try {
@@ -100,6 +151,13 @@ function redirectBasedOnRole(roleId) {
     
     window.location.href = redirectPage;
 }
+
+// Best's implementation: Function to check if user has admin or manager role
+function hasAdminAccess() {
+    const roleId = localStorage.getItem('role_id') || sessionStorage.getItem('role_id');
+    return roleId === '1' || roleId === '2'; // Admin or Manager
+}
+
 
 // ฟังก์ชันสำหรับส่ง request พร้อม token
 async function fetchWithAuth(url, options = {}) {

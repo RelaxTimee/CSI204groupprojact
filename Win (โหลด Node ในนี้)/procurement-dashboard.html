@@ -49,7 +49,7 @@
                     <div class="procurement-list" id="pending-requisitions">
                         <!-- List will be loaded here -->
                     </div>
-                    <a href="purchase-requisition.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
+                    <!-- <a href="purchase-requisition.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a> -->
                 </div>
                 
                 <div class="procurement-card">
@@ -57,7 +57,7 @@
                     <div class="procurement-list" id="pending-orders">
                         <!-- List will be loaded here -->
                     </div>
-                    <a href="purchase-order.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
+                    <!-- <a href="purchase-order.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a> -->
                 </div>
             </div>
             
@@ -78,8 +78,41 @@
         </div>
     </div>
 
+    <script src="logger.js"></script>
     <script src="dashboard.js"></script>
     <script src="auth.js"></script>
     <script src="procurement.js"></script>
+    
+    <!-- ไฟล์ script สำหรับดึงข้อมูล - เลือกใช้เพียงไฟล์เดียวสำหรับแต่ละประเภท -->
+    <script src="./back-end_Pu/db-purchase-requisitions.js"></script>
+    <script src="./back-end_Pu/db-purchase-orders.js"></script>
+    
+    <script>
+        // ป้องกันการเรียกใช้ซ้ำซ้อน
+        let dashboardInitialized = false;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (dashboardInitialized) return;
+            dashboardInitialized = true;
+            
+            console.log("Initializing dashboard data...");
+            
+            // แสดงใบขอซื้อที่รอดำเนินการ
+            setTimeout(() => {
+                if (window.purchaseRequisitionsDB) {
+                    console.log("Displaying purchase requisitions...");
+                    window.purchaseRequisitionsDB.displayPurchaseRequisitions();
+                }
+            }, 100);
+            
+            // แสดงใบสั่งซื้อที่รอดำเนินการ
+            setTimeout(() => {
+                if (window.purchaseOrdersDB) {
+                    console.log("Displaying purchase orders...");
+                    window.purchaseOrdersDB.displayPurchaseOrders();
+                }
+            }, 200);
+        });
+    </script>
 </body>
 </html>

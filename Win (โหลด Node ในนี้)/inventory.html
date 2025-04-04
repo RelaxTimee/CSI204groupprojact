@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการสินค้าคงคลัง</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* เพิ่มสไตล์เฉพาะสำหรับหน้าจัดการสินค้าคงคลัง */
+        .inventory-container {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .inventory-list {
+            flex: 2;
+            background-color: white;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 1.5rem;
+        }
+        
+        .inventory-form {
+            flex: 1;
+            background-color: white;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 1.5rem;
+        }
+        
+        .inventory-search {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .inventory-search input {
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 0.35rem;
+            border: 1px solid #d1d3e2;
+            padding-left: 2.5rem;
+        }
+        
+        .inventory-search i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #858796;
+        }
+        
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .inventory-table th,
+        .inventory-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .inventory-table th {
+            font-weight: 600;
+            background-color: #f8f9fc;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .inventory-table tr:hover {
+            background-color: #f8f9fc;
+            cursor: pointer;
+        }
+        
+        .inventory-table tr.selected {
+            background-color: #e8f0fe;
+            border-left: 3px solid #4e73df;
+        }
+        
+        .inventory-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 0.35rem;
+            border: 1px solid #d1d3e2;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #4e73df;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -0.5rem;
+            margin-left: -0.5rem;
+        }
+        
+        .form-col {
+            flex: 1;
+            padding: 0 0.5rem;
+            min-width: 200px;
+        }
+        
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+            gap: 0.5rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.35rem;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #4e73df;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #858796;
+            color: white;
+        }
+        
+        .btn-success {
+            background-color: #1cc88a;
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: #e74a3b;
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: #f6c23e;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+        }
+        
+        .action-btn {
+            color: #4e73df;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .action-btn:hover {
+            color: #2e59d9;
+        }
+        
+        .action-btn.delete {
+            color: #e74a3b;
+        }
+        
+        .action-btn.delete:hover {
+            color: #be3025;
+        }
+        
+        .stock-status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .stock-status.normal {
+            background-color: #1cc88a;
+            color: white;
+        }
+        
+        .stock-status.low {
+            background-color: #f6c23e;
+            color: white;
+        }
+        
+        .stock-status.out {
+            background-color: #e74a3b;
+            color: white;
+        }
+        
+        .inventory-tabs {
+            display: flex;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .inventory-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #858796;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .inventory-tab:hover {
+            color: #4e73df;
+        }
+        
+        .inventory-tab.active {
+            color: #4e73df;
+            border-bottom-color: #4e73df;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .inventory-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .summary-card {
+            flex: 1;
+            min-width: 200px;
+            background-color: white;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .summary-card h3 {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #858796;
+        }
+        
+        .summary-card .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0.5rem 0;
+        }
+        
+        .summary-card.primary {
+            border-left: 4px solid #4e73df;
+        }
+        
+        .summary-card.success {
+            border-left: 4px solid #1cc88a;
+        }
+        
+        .summary-card.warning {
+            border-left: 4px solid #f6c23e;
+        }
+        
+        .summary-card.danger {
+            border-left: 4px solid #e74a3b;
+        }
+        
+        /* สไตล์สำหรับป๊อปอัพการแจ้งเตือน */
+        .alert-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            background-color: #1cc88a;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateX(200%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 9999;
+        }
+
+        .alert-popup.show {
+            transform: translateX(0);
+        }
+
+        .alert-popup.error {
+            background-color: #e74a3b;
+        }
+        
+        /* สไตล์สำหรับ pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .pagination button {
+            padding: 0.5rem 0.75rem;
+            margin: 0 0.25rem;
+            border: 1px solid #d1d3e2;
+            background-color: white;
+            color: #4e73df;
+            border-radius: 0.35rem;
+            cursor: pointer;
+        }
+        
+        .pagination button:hover {
+            background-color: #f8f9fc;
+        }
+        
+        .pagination button.active {
+            background-color: #4e73df;
+            color: white;
+            border-color: #4e73df;
+        }
+        
+        .pagination button:disabled {
+            color: #858796;
+            cursor: not-allowed;
+        }
+        
+        /* สไตล์สำหรับ modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 1.5rem;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            width: 50%;
+            max-width: 500px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+        }
+        
+        .close {
+            color: #aaa;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+        
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .inventory-container {
+                flex-direction: column;
+            }
+            
+            .modal-content {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fas fa-shopping-cart"></i>
+            <h1>ฝ่ายจัดซื้อ</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="procurement-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="purchase-requisition.html"><i class="fas fa-file-alt"></i> จัดทำใบขอซื้อ</a></li>
+                <li><a href="purchase-order.html"><i class="fas fa-file-invoice"></i> จัดทำใบสั่งซื้อ</a></li>
+                <li><a href="vendor-management.html"><i class="fas fa-store"></i> จัดการผู้ขาย</a></li>
+                <li class="active"><a href="#"><i class="fas fa-boxes"></i> จัดการสินค้าคงคลัง</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <div class="main-content">
+        <header>
+            <div class="search-bar">
+                <input type="text" placeholder="ค้นหา...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="user-profile">
+                <span id="username-display"></span>
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+        
+        <div class="content">
+            <h2>จัดการสินค้าคงคลัง (Inventory Management)</h2>
+            
+            <div class="inventory-summary">
+                <div class="summary-card primary">
+                    <h3>จำนวนสินค้าทั้งหมด</h3>
+                    <div class="value" id="total-items">0</div>
+                </div>
+                <div class="summary-card success">
+                    <h3>มูลค่าสินค้าคงคลัง</h3>
+                    <div class="value" id="total-value">0.00 บาท</div>
+                </div>
+                <div class="summary-card warning">
+                    <h3>สินค้าใกล้หมด</h3>
+                    <div class="value" id="low-stock">0</div>
+                </div>
+                <div class="summary-card danger">
+                    <h3>สินค้าหมด</h3>
+                    <div class="value" id="out-of-stock">0</div>
+                </div>
+            </div>
+            
+            <div class="inventory-tabs">
+                <div class="inventory-tab active" data-tab="inventory">สินค้าคงคลัง</div>
+                <div class="inventory-tab" data-tab="issue">เบิกสินค้า</div>
+            </div>
+            
+            <div class="tab-content active" id="inventory-tab">
+                <div class="inventory-container">
+                    <div class="inventory-list">
+                        <div class="inventory-actions">
+                            <div>
+                                <!-- <button class="btn btn-success btn-sm" id="add-item-btn">
+                                    <i class="fas fa-plus"></i> เพิ่มสินค้าใหม่
+                                </button> -->
+                                <button class="btn btn-warning btn-sm" id="create-pr-btn">
+                                    <i class="fas fa-file-alt"></i> สร้างใบขอซื้อจากสินค้าใกล้หมด
+                                </button>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary btn-sm" id="export-report-btn">
+                                    <i class="fas fa-file-export"></i> ส่งออกรายงาน
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="inventory-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="inventory-search" placeholder="ค้นหาสินค้า...">
+                        </div>
+                        
+                        <div class="table-container">
+                            <table class="inventory-table" id="inventory-table">
+                                <thead>
+                                    <tr>
+                                        <th>รหัส</th>
+                                        <th>ชื่อสินค้า</th>
+                                        <th>หมวดหมู่</th>
+                                        <th>คงเหลือ</th>
+                                        <th>หน่วย</th>
+                                        <th>ราคา/หน่วย</th>
+                                        <th>สถานะ</th>
+                                        <th>การดำเนินการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventory-table-body">
+                                    <!-- รายการสินค้าจะถูกเพิ่มที่นี่ด้วย JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="pagination" id="pagination">
+                            <!-- ปุ่ม pagination จะถูกเพิ่มที่นี่ด้วย JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="inventory-form">
+                        <h3 id="form-title">ข้อมูลสินค้า</h3>
+                        
+                        <form id="inventory-form">
+                            <input type="hidden" id="item-id">
+                            
+                            <div class="form-group">
+                                <label class="form-label">ชื่อสินค้า</label>
+                                <input type="text" class="form-control" id="item-name" placeholder="ชื่อสินค้า">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">หมวดหมู่</label>
+                                <select class="form-control" id="item-category">
+                                    <option value="">เลือกหมวดหมู่</option>
+                                    <option value="วัสดุสำนักงาน">วัสดุสำนักงาน</option>
+                                    <option value="เครื่องเขียน">เครื่องเขียน</option>
+                                    <option value="อุปกรณ์คอมพิวเตอร์">อุปกรณ์คอมพิวเตอร์</option>
+                                    <option value="อุปกรณ์อิเล็กทรอนิกส์">อุปกรณ์อิเล็กทรอนิกส์</option>
+                                    <option value="เฟอร์นิเจอร์">เฟอร์นิเจอร์</option>
+                                    <option value="อื่นๆ">อื่นๆ</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <div class="form-group">
+                                        <label class="form-label">หน่วย</label>
+                                        <select class="form-control" id="item-unit">
+                                            <option value="ชิ้น">ชิ้น</option>
+                                            <option value="อัน">อัน</option>
+                                            <option value="ชุด">ชุด</option>
+                                            <option value="กล่อง">กล่อง</option>
+                                            <option value="รีม">รีม</option>
+                                            <option value="แพ็ค">แพ็ค</option>
+                                            <option value="เครื่อง">เครื่อง</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-col">
+                                    <div class="form-group">
+                                        <label class="form-label">ราคาต่อหน่วย (บาท)</label>
+                                        <input type="number" class="form-control" id="item-price" placeholder="0.00" min="0" step="0.01">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <div class="form-group">
+                                        <label class="form-label">จำนวนคงเหลือ</label>
+                                        <input type="number" class="form-control" id="item-stock" placeholder="0" min="0">
+                                    </div>
+                                </div>
+                                <div class="form-col">
+                                    <div class="form-group">
+                                        <label class="form-label">จำนวนต่ำสุด</label>
+                                        <input type="number" class="form-control" id="item-min-stock" placeholder="0" min="0">
+                                    </div>
+                                </div>
+                                <div class="form-col">
+                                    <div class="form-group">
+                                        <label class="form-label">จำนวนสูงสุด</label>
+                                        <input type="number" class="form-control" id="item-max-stock" placeholder="0" min="0">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">หมายเหตุ</label>
+                                <textarea class="form-control" id="item-notes" rows="3" placeholder="หมายเหตุหรือข้อมูลเพิ่มเติม"></textarea>
+                            </div>
+                            
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary" id="cancel-btn">ยกเลิก</button>
+                                <button type="button" class="btn btn-primary" id="save-btn">บันทึก</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="issue-tab">
+                <h3>เบิกสินค้า</h3>
+                
+                <div class="form-container">
+                    <form id="issue-form">
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label class="form-label">เลขที่ใบเบิกสินค้า</label>
+                                    <input type="text" class="form-control" id="issue-number" value="ISS-2024-XXXX" readonly>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label class="form-label">วันที่</label>
+                                    <input type="date" class="form-control" id="issue-date" value="">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label class="form-label">แผนก</label>
+                                    <select class="form-control" id="department">
+                                        <option value="procurement">ฝ่ายจัดซื้อ</option>
+                                        <option value="finance">ฝ่ายการเงิน</option>
+                                        <option value="it">ฝ่ายไอที</option>
+                                        <option value="hr">ฝ่ายทรัพยากรบุคคล</option>
+                                        <option value="marketing">ฝ่ายการตลาด</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">ผู้เบิก</label>
+                            <input type="text" class="form-control" id="requester-name" placeholder="ชื่อผู้เบิก">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">รายการสินค้า</label>
+                            <button type="button" class="btn btn-success btn-sm" id="add-issue-item-btn">
+                                <i class="fas fa-plus"></i> เพิ่มรายการ
+                            </button>
+                            
+                            <div class="table-container">
+                                <table class="inventory-table" id="issue-items-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="50%">สินค้า</th>
+                                            <th width="15%">คงเหลือ</th>
+                                            <th width="15%">จำนวนเบิก</th>
+                                            <th width="15%">หน่วย</th>
+                                            <th width="5%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="issue-items-body">
+                                        <!-- แถวรายการสินค้าจะถูกเพิ่มที่นี่ด้วย JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">หมายเหตุ</label>
+                            <textarea class="form-control" id="issue-notes" rows="3" placeholder="หมายเหตุหรือข้อมูลเพิ่มเติม"></textarea>
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary" id="cancel-issue-btn">ยกเลิก</button>
+                            <button type="button" class="btn btn-primary" id="save-issue-btn">บันทึกการเบิกสินค้า</button>
+                            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal สำหรับยืนยันการลบ -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>ยืนยันการลบ</h3>
+                <span class="close">&times;</span>
+            </div>
+            <p>คุณต้องการลบสินค้า <span id="delete-item-name"></span> ใช่หรือไม่?</p>
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary" id="cancel-delete-btn">ยกเลิก</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-btn">ลบ</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ป๊อปอัพการแจ้งเตือน -->
+    <div class="alert-popup" id="alert-popup"></div>
+
+    <script src="dashboard.js"></script>
+    <script src="auth.js"></script>
+    <script src="./back-end_Pu/Inventory/invenOut.js"></script>
+    <script src="./back-end_Pu/Inventory/InvenIN.js"></script>
+    <script src="./back-end_Pu/Inventory/receiveInventory.js"></script>
+    <script src="procurement.js"></script>
+
+</body>
+</html>

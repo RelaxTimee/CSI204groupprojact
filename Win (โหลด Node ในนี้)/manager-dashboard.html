@@ -6,7 +6,116 @@
     <title>Manager Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="../dashboard.css">
+    <style>
+        /* Additional styles for manager dashboard */
+        .progress-container {
+            width: 100%;
+            background-color: #e9ecef;
+            border-radius: 0.25rem;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            border-radius: 0.25rem;
+            background-color: #4e73df;
+        }
+        
+        .progress-warning {
+            background-color: #f6c23e;
+        }
+        
+        .progress-danger {
+            background-color: #e74a3b;
+        }
+        
+        .budget-summary {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--secondary);
+        }
+        
+        .approval-flow {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .approval-step {
+            text-align: center;
+            padding: 0.5rem;
+            width: 100px;
+        }
+        
+        .approval-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f8f9fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 0.5rem;
+            color: var(--secondary);
+        }
+        
+        .approval-arrow {
+            width: 30px;
+            text-align: center;
+            color: var(--secondary);
+        }
+        
+        .approval-step.active .approval-icon {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .approval-step.completed .approval-icon {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .asset-chart {
+            margin-top: 1rem;
+            height: 200px;
+            background-color: #f8f9fc;
+            border-radius: 0.35rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* เพิ่มสไตล์สำหรับทำให้รายการสามารถคลิกได้ */
+        .procurement-item {
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        .procurement-item:hover {
+            background-color: #f8f9fc;
+            transform: translateY(-2px);
+            box-shadow: 0 0.15rem 0.5rem rgba(58, 59, 69, 0.15);
+        }
+    </style>
 </head>
 <body>
     <div class="sidebar">
@@ -16,11 +125,11 @@
         </div>
         <nav>
             <ul>
-                <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="approval-request.html"><i class="fas fa-clipboard-check"></i> คำขออนุมัติ</a></li>
-                <li><a href="manager-procurement.html"><i class="fas fa-shopping-cart"></i> การจัดซื้อ</a></li>
-                <li><a href="department-budget.html"><i class="fas fa-money-bill-alt"></i> งบประมาณแผนก</a></li>
-                <li><a href="manager-reports.html"><i class="fas fa-chart-line"></i> รายงานผลการดำเนินงาน</a></li>
+                <li class="active"><a href="manager-dashboard.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="manager/approval-request.html"><i class="fas fa-clipboard-check"></i> <span>คำขออนุมัติ</span></a></li>
+                <!-- <li><a href="manager/manager-procurement.html"><i class="fas fa-shopping-cart"></i> <span>การจัดซื้อ</span></a></li> -->
+                <li><a href="manager/department-budget.html"><i class="fas fa-money-bill-alt"></i> <span>งบประมาณ</span></a></li>
+                <!-- <li><a href="manager/manager-reports.html"><i class="fas fa-chart-line"></i> <span>รายงานผลการดำเนินงาน</span></a></li> -->
             </ul>
         </nav>
     </div>
@@ -32,7 +141,7 @@
                 <i class="fas fa-search"></i>
             </div>
             <div class="user-profile">
-                <span id="username-display"></span>
+                <span id="username-display">Manager</span>
                 <div class="avatar">
                     <i class="fas fa-user-circle"></i>
                 </div>
@@ -41,46 +150,7 @@
         </header>
         
         <div class="content">
-            <h2>แดชบอร์ดผู้จัดการ</h2>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon" style="background-color: #4e73df;">
-                        <i class="fas fa-clipboard-list"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>คำขอรออนุมัติ</h3>
-                        <p id="pending-approvals">8</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background-color: #1cc88a;">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>อนุมัติแล้ว</h3>
-                        <p id="approved-requests">24</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background-color: #f6c23e;">
-                        <i class="fas fa-money-bill-wave"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>งบประมาณที่ใช้ไป</h3>
-                        <p id="budget-used">฿850,400</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background-color: #e74a3b;">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>ปัญหาเร่งด่วน</h3>
-                        <p id="urgent-issues">2</p>
-                    </div>
-                </div>
-            </div>
+ 
             
             <div class="procurement-section">
                 <div class="procurement-card">
@@ -98,7 +168,7 @@
                         <div class="procurement-item">
                             <div class="procurement-item-info">
                                 <p><strong>PR-2024-0057</strong> - อุปกรณ์คอมพิวเตอร์</p>
-                                <small>จากแผนก: ฝ่ายจัดซื้อ | วันที่ 26/03/2024</small>
+                                <small>จากแผนก: ฝ่าย IT | วันที่ 26/03/2024</small>
                             </div>
                             <div class="procurement-item-status">
                                 <span class="status-badge status-pending">รออนุมัติ</span>
@@ -107,72 +177,81 @@
                         <div class="procurement-item">
                             <div class="procurement-item-info">
                                 <p><strong>PR-2024-0056</strong> - อุปกรณ์สำนักงาน</p>
-                                <small>จากแผนก: ฝ่ายจัดซื้อ | วันที่ 25/03/2024</small>
+                                <small>จากแผนก: ฝ่ายการเงิน | วันที่ 25/03/2024</small>
                             </div>
                             <div class="procurement-item-status">
                                 <span class="status-badge status-pending">รออนุมัติ</span>
                             </div>
                         </div>
                     </div>
-                    <a href="approval-request.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
+                    <a href="manager/approval-request.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
+            </div>
+            
+                
                 <div class="procurement-card">
-                    <h3>โครงการสำคัญ</h3>
-                    <div class="procurement-list" id="important-projects">
-                        <div class="procurement-item">
-                            <div class="procurement-item-info">
-                                <p><strong>PRJ-2024-0005</strong> - ปรับปรุงห้องประชุมใหญ่</p>
-                                <small>สถานะ: กำลังดำเนินการ | เสร็จสิ้น: 45%</small>
+                    <h3>ขั้นตอนการอนุมัติการจัดซื้อสินทรัพย์ถาวร</h3>
+                    <div class="approval-flow">
+                        <div class="approval-step completed">
+                            <div class="approval-icon">
+                                <i class="fas fa-file-alt"></i>
                             </div>
-                            <div class="procurement-item-status">
-                                <span class="status-badge status-pending">In Progress</span>
-                            </div>
+                            <div class="approval-text">จัดทำใบขอซื้อ</div>
                         </div>
-                        <div class="procurement-item">
-                            <div class="procurement-item-info">
-                                <p><strong>PRJ-2024-0004</strong> - อัพเกรดระบบเครือข่าย</p>
-                                <small>สถานะ: กำลังดำเนินการ | เสร็จสิ้น: 70%</small>
-                            </div>
-                            <div class="procurement-item-status">
-                                <span class="status-badge status-pending">In Progress</span>
-                            </div>
+                        <div class="approval-arrow">
+                            <i class="fas fa-chevron-right"></i>
                         </div>
-                        <div class="procurement-item">
-                            <div class="procurement-item-info">
-                                <p><strong>PRJ-2024-0003</strong> - ระบบความปลอดภัย</p>
-                                <small>สถานะ: เสร็จสิ้น | วันที่: 15/03/2024</small>
+                        <div class="approval-step active">
+                            <div class="approval-icon">
+                                <i class="fas fa-clipboard-check"></i>
                             </div>
-                            <div class="procurement-item-status">
-                                <span class="status-badge status-approved">Completed</span>
+                            <div class="approval-text">อนุมัติ</div>
+                        </div>
+                        <div class="approval-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="approval-step">
+                            <div class="approval-icon">
+                                <i class="fas fa-file-invoice"></i>
                             </div>
+                            <div class="approval-text">จัดทำใบสั่งซื้อ</div>
+                        </div>
+                        <div class="approval-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="approval-step">
+                            <div class="approval-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="approval-text">รับสินทรัพย์</div>
                         </div>
                     </div>
-                    <a href="manager-projects.html" class="view-all">ดูทั้งหมด <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
             
             <div class="quick-actions">
                 <h3>ดำเนินการด่วน</h3>
                 <div class="action-buttons">
-                    <button class="action-btn" onclick="location.href='approval-request.html'">
+                    <button class="action-btn" onclick="location.href='manager/approval-request.html'">
                         <i class="fas fa-clipboard-check"></i> อนุมัติคำขอ
+                        <span class="notification-badge">8</span>
                     </button>
-                    <button class="action-btn" onclick="location.href='department-budget.html'">
+                    <button class="action-btn" onclick="location.href='manager/department-budget.html'">
                         <i class="fas fa-money-bill-alt"></i> ตรวจสอบงบประมาณ
                     </button>
-                    <button class="action-btn" onclick="location.href='manager-reports.html'">
-                        <i class="fas fa-chart-line"></i> ดูรายงานสรุป
+                    <button class="action-btn" onclick="location.href='manager/approval-request.html'">
+                        <i class="fas fa-building"></i> อนุมัติสินทรัพย์ถาวร
                     </button>
+           
                 </div>
             </div>
+            
+       
         </div>
     </div>
 
-    <script src="dashboard.js"></script>
-    <script src="auth.js"></script>
     <script>
-        // ข้อมูลจำลองสำหรับหน้า Manager Dashboard
         document.addEventListener('DOMContentLoaded', function() {
             // ตรวจสอบว่าผู้ใช้มี role_id = 2 (Manager)
             const roleId = localStorage.getItem('role_id') || sessionStorage.getItem('role_id');
@@ -184,9 +263,253 @@
                 return;
             }
             
-            // เพิ่มฟังก์ชันอื่นๆ เฉพาะของหน้า Manager Dashboard ตรงนี้
-            // ...
+            // แสดงชื่อผู้ใช้
+            const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+            if (username) {
+                document.getElementById('username-display').textContent = username;
+            }
+            
+            // ปุ่มออกจากระบบ
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
+                    localStorage.removeItem('jwtToken');
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('role_id');
+                    sessionStorage.removeItem('jwtToken');
+                    sessionStorage.removeItem('username');
+                    sessionStorage.removeItem('role_id');
+                    window.location.href = '../login.html';
+                }
+            });
+            
+            // โหลดข้อมูลสำหรับแสดงในหน้า Dashboard
+            fetchDashboardData();
         });
+        
+        // ฟังก์ชันดึงข้อมูลสำหรับ Dashboard
+        function fetchDashboardData() {
+            // ในระบบจริง จะดึงข้อมูลจาก API
+            // ตัวอย่างข้อมูลสำหรับการแสดงผล
+            const dashboardData = {
+                pendingApprovals: 8,
+                approvedRequests: 24,
+                budgetUsed: 850400,
+                totalBudget: 1300000,
+                urgentIssues: 2,
+                recentRequests: [
+                    { id: 'PR-2024-0058', title: 'เฟอร์นิเจอร์สำนักงาน', department: 'ฝ่ายจัดซื้อ', date: '27/03/2024', status: 'pending' },
+                    { id: 'PR-2024-0057', title: 'อุปกรณ์คอมพิวเตอร์', department: 'ฝ่าย IT', date: '26/03/2024', status: 'pending' },
+                    { id: 'PR-2024-0056', title: 'อุปกรณ์สำนักงาน', department: 'ฝ่ายการเงิน', date: '25/03/2024', status: 'pending' }
+                ],
+                departmentBudgets: [
+                    { name: 'ฝ่ายจัดซื้อ', used: 225000, total: 500000 },
+                    { name: 'ฝ่าย IT', used: 390000, total: 500000 },
+                    { name: 'ฝ่ายการเงิน', used: 255000, total: 300000 }
+                ],
+                projects: [
+                    { id: 'PRJ-2024-0005', title: 'ปรับปรุงห้องประชุมใหญ่', status: 'In Progress', progress: 45 },
+                    { id: 'PRJ-2024-0004', title: 'อัพเกรดระบบเครือข่าย', status: 'In Progress', progress: 70 },
+                    { id: 'PRJ-2024-0003', title: 'ระบบความปลอดภัย', status: 'Completed', progress: 100, completedDate: '15/03/2024' }
+                ]
+            };
+            
+            // อัพเดตข้อมูลในหน้า
+            document.getElementById('pending-approvals').textContent = dashboardData.pendingApprovals;
+            document.getElementById('approved-requests').textContent = dashboardData.approvedRequests;
+            document.getElementById('budget-used').textContent = '฿' + dashboardData.budgetUsed.toLocaleString();
+            document.getElementById('urgent-issues').textContent = dashboardData.urgentIssues;
+            
+            // แสดงจำนวนการแจ้งเตือนบนปุ่ม "อนุมัติคำขอ"
+            const notificationBadge = document.querySelector('.notification-badge');
+            notificationBadge.textContent = dashboardData.pendingApprovals;
+        }
+
+
+        // ฟังก์ชันดึงข้อมูลคำขออนุมัติล่าสุด
+async function fetchRecentApprovalRequests() {
+    try {
+        const token = localStorage.getItem('jwtToken') || sessionStorage.getItem('jwtToken');
+        const response = await fetch('/api/purchase-requisitions?status=pending&limit=3&sort=date_desc', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('ไม่สามารถดึงข้อมูลคำขออนุมัติได้');
+        }
+
+        const requests = await response.json();
+        displayRecentApprovalRequests(requests);
+    } catch (error) {
+        console.error('Error fetching recent approval requests:', error);
+        // แสดงข้อมูลตัวอย่างหากไม่สามารถเชื่อมต่อกับ API ได้
+        displayMockRecentApprovalRequests();
+    }
+}
+
+// แสดงข้อมูลคำขออนุมัติล่าสุด
+function displayRecentApprovalRequests(requests) {
+    const container = document.getElementById('recent-approval-requests');
+    container.innerHTML = '';
+
+    if (requests.length === 0) {
+        container.innerHTML = '<div class="procurement-item"><div class="procurement-item-info"><p>ไม่มีคำขออนุมัติล่าสุด</p></div></div>';
+        return;
+    }
+
+    requests.forEach(request => {
+        const statusClass = getStatusClass(request.status || request.STATUS);
+        const statusText = getStatusText(request.status || request.STATUS);
+        
+        const item = document.createElement('div');
+        item.className = 'procurement-item';
+        item.onclick = () => window.location.href = `manager/approval-request.html?id=${request.id}`;
+        
+        item.innerHTML = `
+            <div class="procurement-item-info">
+                <p><strong>${request.id}</strong> - ${request.title}</p>
+                <small>จากแผนก: ${getThaiDepartmentName(request.department)} | วันที่ ${formatDate(request.DATE || request.date)}</small>
+            </div>
+            <div class="procurement-item-status">
+                <span class="status-badge ${statusClass}">${statusText}</span>
+            </div>
+        `;
+        
+        container.appendChild(item);
+    });
+}
+
+// แสดงข้อมูลตัวอย่างหากไม่สามารถเชื่อมต่อ API ได้
+function displayMockRecentApprovalRequests() {
+    const mockRequests = [
+        {
+            id: 'PR-2025-4368',
+            title: 'YYYYYY',
+            DATE: '2025-04-03',
+            department: 'procurement',
+            STATUS: 'approved',
+            total_amount: 134.00
+        },
+        {
+            id: 'PR-2025-5975',
+            title: 'GGGGGGGGG',
+            DATE: '2025-04-03',
+            department: 'procurement',
+            STATUS: 'approved',
+            total_amount: 50.00
+        },
+        {
+            id: 'PR-2025-7418',
+            title: 'wdad',
+            DATE: '2025-04-03',
+            department: 'procurement',
+            STATUS: 'approved',
+            total_amount: 4.00
+        }
+    ];
+    
+    displayRecentApprovalRequests(mockRequests);
+}
+
+// เพิ่มฟังก์ชันเหล่านี้ในส่วน Helper functions
+function getStatusClass(status) {
+    switch (status) {
+        case 'approved': return 'status-approved';
+        case 'rejected': return 'status-rejected';
+        case 'pending': return 'status-pending';
+        case 'draft': return 'status-pending';
+        default: return '';
+    }
+}
+
+function getStatusText(status) {
+    switch (status) {
+        case 'approved': return 'อนุมัติแล้ว';
+        case 'rejected': return 'ไม่อนุมัติ';
+        case 'pending': return 'รออนุมัติ';
+        case 'draft': return 'แบบร่าง';
+        default: return status;
+    }
+}
+
+function getThaiDepartmentName(department) {
+    switch (department) {
+        case 'procurement': return 'ฝ่ายจัดซื้อ';
+        case 'finance': return 'ฝ่ายการเงิน';
+        case 'it': return 'ฝ่ายไอที';
+        default: return department;
+    }
+}
+
+function formatDate(dateString) {
+    if (!dateString) return '';
+    
+    const date = new Date(dateString);
+    if (isNaN(date)) return dateString;
+    
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    
+    return `${day}/${month}/${year}`;
+}
+
+function fetchDashboardData() {
+    // โหลดข้อมูลคำขออนุมัติล่าสุด
+    fetchRecentApprovalRequests();
+    
+    // โหลดข้อมูลอื่นๆ ของ Dashboard
+    const dashboardData = {
+        pendingApprovals: 8,
+        approvedRequests: 24,
+        budgetUsed: 850400,
+        totalBudget: 1300000,
+        urgentIssues: 2,
+        departmentBudgets: [
+            { name: 'ฝ่ายจัดซื้อ', used: 225000, total: 500000 },
+            { name: 'ฝ่าย IT', used: 390000, total: 500000 },
+            { name: 'ฝ่ายการเงิน', used: 255000, total: 300000 }
+        ],
+        projects: [
+            { id: 'PRJ-2024-0005', title: 'ปรับปรุงห้องประชุมใหญ่', status: 'In Progress', progress: 45 },
+            { id: 'PRJ-2024-0004', title: 'อัพเกรดระบบเครือข่าย', status: 'In Progress', progress: 70 },
+            { id: 'PRJ-2024-0003', title: 'ระบบความปลอดภัย', status: 'Completed', progress: 100, completedDate: '15/03/2024' }
+        ]
+    };
+    
+    // อัพเดตข้อมูลในหน้า
+    document.getElementById('pending-approvals').textContent = dashboardData.pendingApprovals;
+    document.getElementById('approved-requests').textContent = dashboardData.approvedRequests;
+    document.getElementById('budget-used').textContent = '฿' + dashboardData.budgetUsed.toLocaleString();
+    document.getElementById('urgent-issues').textContent = dashboardData.urgentIssues;
+    
+    // แสดงจำนวนการแจ้งเตือนบนปุ่ม "อนุมัติคำขอ"
+    const notificationBadge = document.querySelector('.notification-badge');
+    notificationBadge.textContent = dashboardData.pendingApprovals;
+}
+        
+        // ฟังก์ชัน redirect ตาม role
+        function redirectBasedOnRole(roleId) {
+            switch(roleId) {
+                case '1':
+                    window.location.href = '../admin/admin-dashboard.html';
+                    break;
+                case '3':
+                    window.location.href = '../procurement/procurement-dashboard.html';
+                    break;
+                case '4':
+                    window.location.href = '../finance/finance-dashboard.html';
+                    break;
+                case '5':
+                    window.location.href = '../it/it-dashboard.html';
+                    break;
+                default:
+                    window.location.href = '../login.html';
+            }
+        }
     </script>
 </body>
 </html>
